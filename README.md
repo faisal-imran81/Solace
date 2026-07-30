@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
@@ -157,3 +158,17 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
 - [Configuration Options](https://turborepo.dev/docs/reference/configuration)
 - [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+=======
+# 🧠 Solace — AI-powered Mental Wellness Companion
+
+> Solace is a global mental health platform that connects people to AI-powered emotional support, mood tracking, journaling, and an anonymous community.
+
+## Tech Stack
+- Frontend: Next.js 15 + Tailwind CSS + shadcn/ui
+- Backend: FastAPI (Python)
+- AI: Groq API (LLaMA 3.1)
+- Database: PostgreSQL + Prisma
+- Auth: Clerk
+- Realtime: Supabase
+- Deploy: Vercel + Railway
+>>>>>>> 3a87032c0c92a8b2466e795f2141f61a115f2abc
