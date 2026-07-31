@@ -1,49 +1,62 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight, Heart } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-import { Reveal } from "./Reveal"
 
 export function CTA() {
   return (
-    <section className="relative px-4 py-28">
-      <Reveal>
-        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] border border-white/10 px-8 py-20 text-center sm:py-24">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-violet-600 via-fuchsia-600 to-cyan-600" />
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(500px_at_50%_120%,rgba(255,255,255,0.25),transparent_70%)]" />
+    <section className="relative overflow-hidden px-4 py-28">
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-900/50 via-transparent to-cyan-900/30" />
 
-          <motion.div
-            className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[32rem] -translate-x-1/2 rounded-full bg-white/20 blur-[80px]"
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
+      <div className="pointer-events-none absolute -top-32 -left-32 size-[28rem] rounded-full bg-violet-600/20 blur-[120px]">
+        <motion.div
+          className="size-full rounded-full"
+          animate={{ x: [0, 50, 0], y: [0, 35, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+      <div className="pointer-events-none absolute -right-40 -bottom-40 size-[30rem] rounded-full bg-cyan-500/15 blur-[120px]">
+        <motion.div
+          className="size-full rounded-full"
+          animate={{ x: [0, -40, 0], y: [0, -50, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
 
-          <div className="relative">
-            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md">
-              <Heart className="size-3.5" /> Free forever for individuals
-            </span>
+      <div className="relative mx-auto max-w-4xl px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h2 className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl">
+            Your healing journey starts today
+          </h2>
 
-            <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-5xl">
-              Your mental health matters.
-              <br className="hidden sm:block" /> Start today — it&rsquo;s free.
-            </h2>
+          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
+            Join thousands finding peace with Solace. Free forever, no credit card
+            needed.
+          </p>
 
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/80">
-              Join millions who found a little more peace, one conversation at a
-              time.
-            </p>
-
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/sign-up"
-              className="group mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold text-violet-700 shadow-2xl shadow-black/20 transition-all duration-200 hover:scale-[1.03]"
+              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03] hover:shadow-violet-500/50"
             >
-              Get Started
+              Start for Free
               <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
+            <a
+              href="#features"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-8 py-4 text-sm font-semibold text-white/80 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+            >
+              Learn More
+            </a>
           </div>
-        </div>
-      </Reveal>
+        </motion.div>
+      </div>
     </section>
   )
 }
