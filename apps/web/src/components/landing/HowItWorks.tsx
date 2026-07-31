@@ -1,84 +1,90 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { UserPlus, MessagesSquare, TrendingUp } from "lucide-react"
-import { Reveal, staggerContainer, fadeUp } from "./Reveal"
+import { UserPlus, MessageCircle, TrendingUp, type LucideIcon } from "lucide-react"
 
-const steps = [
+const steps: {
+  icon: LucideIcon
+  number: string
+  title: string
+  description: string
+}[] = [
   {
     icon: UserPlus,
-    step: "01",
-    title: "Sign up anonymously",
+    number: "01",
+    title: "Create Account",
     description:
-      "Create an account with just a username. No personal details, no phone number, no judgment.",
+      "Sign up anonymously in seconds. No personal information required.",
   },
   {
-    icon: MessagesSquare,
-    step: "02",
-    title: "Talk to your AI companion",
+    icon: MessageCircle,
+    number: "02",
+    title: "Talk to Solace",
     description:
-      "Open up to an empathetic AI that listens deeply and responds with care, around the clock.",
+      "Start a conversation, track your mood, or write in your journal.",
   },
   {
     icon: TrendingUp,
-    step: "03",
-    title: "Track your growth",
+    number: "03",
+    title: "Grow & Heal",
     description:
-      "Watch your mood, resilience, and self-awareness grow with patterns you can see clearly.",
+      "Get personalized insights and watch your wellness improve over time.",
   },
 ]
 
 export function HowItWorks() {
   return (
     <section id="how-it-works" className="relative scroll-mt-24 px-4 py-28">
-      <div className="mx-auto max-w-6xl">
-        <Reveal className="mx-auto max-w-2xl text-center">
+      <div className="pointer-events-none absolute top-1/4 right-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]" />
+
+      <div className="relative mx-auto max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <span className="text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
             How it works
           </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            From overwhelmed to understood
+          <h2 className="mt-4 bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-5xl">
+            How Solace Works
           </h2>
           <p className="mt-4 text-base leading-relaxed text-white/60">
             Three simple steps. Your entire journey — private and pressure-free.
           </p>
-        </Reveal>
+        </motion.div>
 
         <div className="relative mt-20">
-          <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-6 right-[16%] left-[16%] hidden h-px origin-left bg-gradient-to-r from-violet-500/50 via-fuchsia-500/50 to-cyan-500/50 lg:block"
-          />
+          <div className="absolute top-8 right-[16%] left-[16%] hidden border-t-2 border-dashed border-white/15 lg:block" />
 
-          <motion.div
-            variants={staggerContainer(0.2)}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            className="relative grid gap-12 lg:grid-cols-3 lg:gap-8"
-          >
-            {steps.map((step) => (
-              <motion.div key={step.step} variants={fadeUp} className="relative flex flex-col items-center text-center">
-                <div className="relative z-10 grid size-12 place-items-center rounded-2xl border border-white/10 bg-[#0d0d15] shadow-lg shadow-black/40">
-                  <step.icon className="size-5 text-cyan-400" />
+          <div className="relative grid gap-12 lg:grid-cols-3 lg:gap-8">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className="relative flex flex-col items-center text-center"
+              >
+                <div className="relative z-10 grid size-16 place-items-center rounded-2xl border border-white/10 bg-[#0d0d15] shadow-lg shadow-violet-500/10">
+                  <div className="absolute inset-0 -z-10 rounded-2xl bg-violet-600/20 blur-xl" />
+                  <step.icon className="size-7 text-cyan-400" />
                 </div>
 
-                <div className="mt-6 inline-flex items-baseline gap-2">
-                  <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-sm font-bold text-transparent">
-                    {step.step}
-                  </span>
-                </div>
+                <span className="mt-6 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-6xl font-black leading-none text-transparent">
+                  {step.number}
+                </span>
 
-                <h3 className="mt-3 text-xl font-semibold text-white">{step.title}</h3>
+                <h3 className="mt-4 text-xl font-semibold text-white">{step.title}</h3>
                 <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
                   {step.description}
                 </p>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
