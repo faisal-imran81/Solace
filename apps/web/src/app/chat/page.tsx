@@ -594,6 +594,12 @@ export default function ChatPage() {
             >
               📊 Mood
             </Link>
+            <Link
+              href="/journal"
+              className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+            >
+              📝 Journal
+            </Link>
             <button
               onClick={newChat}
               disabled={isStreaming}
