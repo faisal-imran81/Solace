@@ -10,6 +10,9 @@ import {
 } from "framer-motion"
 import { ArrowRight, Play, Sparkles, Brain, Send, Heart } from "lucide-react"
 import Link from "next/link"
+import dynamic from "next/dynamic"
+
+const BrainOrb = dynamic(() => import("@/components/three/BrainOrb"), { ssr: false })
 
 const phrases = ["Find Your Peace", "Heal Your Mind", "You Are Not Alone"]
 
@@ -220,30 +223,36 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <motion.div
-          style={{ x: cardX, y: cardY, perspective: 800 }}
-          initial={{ opacity: 0, y: 40, rotateX: 12 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-sm"
-        >
           <motion.div
-            className="absolute inset-0 -z-10 rounded-3xl blur-3xl"
-            style={{ background: glowBackground }}
-          />
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-black/50 backdrop-blur-xl">
-            <div className="mb-4 flex items-center justify-between px-1">
-              <span className="flex items-center gap-2 text-xs font-medium text-white/80">
-                <span className="size-2 rounded-full bg-violet-400" />
-                Your safe space
-              </span>
-              <span className="flex items-center gap-2 text-xs text-white/50">
-                <Heart className="size-3.5 text-rose-400" /> 24/7
-              </span>
+            style={{ x: cardX, y: cardY, perspective: 800 }}
+            initial={{ opacity: 0, y: 40, rotateX: 12 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto w-full max-w-sm"
+          >
+            <div className="relative aspect-square w-full">
+              <motion.div
+                className="absolute inset-0 -z-10 rounded-3xl blur-3xl"
+                style={{ background: glowBackground }}
+              />
+              <div className="h-full w-full overflow-hidden rounded-3xl">
+                <BrainOrb />
+              </div>
             </div>
-            <MockChat />
-          </div>
-        </motion.div>
+
+            <div className="mt-4 rounded-3xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-black/50 backdrop-blur-xl">
+              <div className="mb-4 flex items-center justify-between px-1">
+                <span className="flex items-center gap-2 text-xs font-medium text-white/80">
+                  <span className="size-2 rounded-full bg-violet-400" />
+                  Your safe space
+                </span>
+                <span className="flex items-center gap-2 text-xs text-white/50">
+                  <Heart className="size-3.5 text-rose-400" /> 24/7
+                </span>
+              </div>
+              <MockChat />
+            </div>
+          </motion.div>
       </div>
     </section>
   )
