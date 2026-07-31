@@ -3,6 +3,7 @@
 import { Brain } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { UserButton, useUser } from "@clerk/nextjs"
 
 const links = [
   { href: "#features", label: "Features" },
@@ -11,6 +12,8 @@ const links = [
 ]
 
 export function Navbar() {
+  const { isSignedIn } = useUser()
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -38,12 +41,26 @@ export function Navbar() {
           ))}
         </div>
 
-        <Link
-          href="/chat"
-          className="rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-violet-500/25 transition-transform duration-200 hover:scale-105"
-        >
-          Get Started
-        </Link>
+        <div className="flex items-center gap-3">
+          {isSignedIn ? (
+            <>
+              <Link
+                href="/chat"
+                className="rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-violet-500/25 transition-transform duration-200 hover:scale-105"
+              >
+                Go to Chat
+              </Link>
+              <UserButton />
+            </>
+          ) : (
+            <Link
+              href="/sign-up"
+              className="rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-violet-500/25 transition-transform duration-200 hover:scale-105"
+            >
+              Get Started
+            </Link>
+          )}
+        </div>
       </nav>
     </motion.header>
   )
