@@ -5,9 +5,28 @@ import Link from "next/link"
 
 const ERROR_MESSAGE = "Something went wrong. Please try again."
 
+const CRISIS_KEYWORDS = [
+  "suicide", "kill myself", "end my life", "don't want to live",
+  "self harm", "hurt myself", "want to die", "no reason to live",
+  "can't go on", "give up on life",
+]
+
+function detectCrisis(text: string): boolean {
+  const lower = text.toLowerCase()
+  return CRISIS_KEYWORDS.some((kw) => lower.includes(kw))
+}
+
 const SUGGESTIONS = ["I'm feeling anxious", "I need to talk", "Help me calm down"]
 
 type Message = { role: "user" | "assistant"; content: string }
+
+type Session = {
+  id: string
+  title: string | null
+  pinned: boolean
+  createdAt: string
+  updatedAt: string
+}
 
 const GROQ_API_URL = "http://localhost:8000/api/v1/chat/"
 
@@ -25,6 +44,12 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isStreaming, setIsStreaming] = useState(false)
+  const [showCrisisBanner, setShowCrisisBanner] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
+  const [sessions, setSessions] = useState<Session[]>([])
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [loadingSession, setLoadingSession] = useState(false)
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -36,11 +61,52 @@ export default function ChatPage() {
     if (el) el.scrollTop = el.scrollHeight
   }, [messages])
 
+  useEffect(() => {
+    fetchSessions()
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside() {
+      setOpenMenuId(null)
+    }
+    if (openMenuId) {
+      document.addEventListener("click", handleClickOutside)
+      return () => document.removeEventListener("click", handleClickOutside)
+    }
+  }, [openMenuId])
+
   function autoResize() {
     const el = textareaRef.current
     if (!el) return
     el.style.height = "auto"
     el.style.height = `${Math.min(el.scrollHeight, 112)}px`
+  }
+
+  async function createSession(): Promise<string | null> {
+    try {
+      const res = await fetch("/api/chat/session", { method: "POST" })
+      if (!res.ok) return null
+      const data = await res.json()
+      return data.sessionId
+    } catch {
+      return null
+    }
+  }
+
+  async function saveMessage(
+    sid: string,
+    role: "user" | "assistant",
+    content: string,
+  ) {
+    try {
+      await fetch("/api/chat/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: sid, role, content }),
+      })
+    } catch {
+      /* silent fail */
+    }
   }
 
   async function sendMessage(raw: string) {
@@ -50,11 +116,30 @@ export default function ChatPage() {
     setInput("")
     if (textareaRef.current) textareaRef.current.style.height = "auto"
 
+    let sid = sessionId
+    const isNewSession = !sid
+    if (!sid) {
+      sid = await createSession()
+      if (sid) setSessionId(sid)
+    }
+
     setMessages((prev) => [...prev, { role: "user", content: text }])
     setMessages((prev) => [...prev, { role: "assistant", content: "" }])
     setIsStreaming(true)
 
+    if (detectCrisis(text)) setShowCrisisBanner(true)
+    if (sid) {
+      await saveMessage(sid, "user", text)
+      // Auto-title on first message of new session
+      if (isNewSession) {
+        await updateSessionTitle(sid, text)
+        fetchSessions()
+      }
+    }
+
     const history = [...messagesRef.current, { role: "user", content: text }]
+
+    let fullResponse = ""
 
     try {
       const res = await fetch(GROQ_API_URL, {
@@ -81,13 +166,17 @@ export default function ChatPage() {
             const token = line.slice(6)
             if (!token || token === "[DONE]") continue
             appendToken(token)
+            fullResponse += token
           }
         }
       }
 
       if (buffer.startsWith("data: ")) {
         const token = buffer.slice(6)
-        if (token && token !== "[DONE]") appendToken(token)
+        if (token && token !== "[DONE]") {
+          appendToken(token)
+          fullResponse += token
+        }
       }
     } catch {
       setMessages((prev) => {
@@ -101,7 +190,9 @@ export default function ChatPage() {
         return next
       })
     } finally {
+      if (sid && fullResponse) await saveMessage(sid, "assistant", fullResponse)
       setIsStreaming(false)
+      fetchSessions()
     }
   }
 
@@ -133,7 +224,109 @@ export default function ChatPage() {
     setIsStreaming(false)
     setInput("")
     setMessages([])
+    setSessionId(null)
+    setShowCrisisBanner(false)
+    setSidebarOpen(false)
     if (textareaRef.current) textareaRef.current.style.height = "auto"
+  }
+
+  // Fetch all sessions from DB
+  async function fetchSessions() {
+    try {
+      const res = await fetch("/api/chat/session")
+      if (!res.ok) return
+      const data = await res.json()
+      // API returns { sessions: [...] }
+      setSessions(Array.isArray(data) ? data : data.sessions ?? [])
+    } catch {
+      /* silent */
+    }
+  }
+
+  // Load a previous session's messages
+  async function loadSession(sid: string) {
+    if (isStreaming) return
+    setLoadingSession(true)
+    try {
+      const res = await fetch(`/api/chat/messages?sessionId=${sid}`)
+      if (!res.ok) return
+      const data: { messages: Array<{ role: "user" | "assistant"; content: string }> } =
+        await res.json()
+      setMessages(
+        (data.messages ?? []).map((m) => ({ role: m.role, content: m.content })),
+      )
+      setSessionId(sid)
+      setShowCrisisBanner(false)
+      setSidebarOpen(false)
+    } catch {
+      /* silent */
+    } finally {
+      setLoadingSession(false)
+    }
+  }
+
+  // Auto-update session title from first user message
+  async function updateSessionTitle(sid: string, firstMessage: string) {
+    try {
+      const raw = firstMessage.trim()
+      const title = raw.slice(0, 45) + (raw.length > 45 ? "..." : "")
+      const res = await fetch("/api/chat/session", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: sid, title }),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        console.error("Title update failed:", err)
+      }
+      // Refresh sessions list immediately
+      await fetchSessions()
+    } catch (e) {
+      console.error("updateSessionTitle error:", e)
+    }
+  }
+
+  async function deleteSession(sid: string) {
+    try {
+      await fetch(`/api/chat/session?sessionId=${sid}`, { method: "DELETE" })
+      if (sessionId === sid) newChat()
+      setSessions((prev) => prev.filter((s) => s.id !== sid))
+    } catch {
+      /* silent */
+    }
+    setOpenMenuId(null)
+  }
+
+  async function pinSession(sid: string, currentPinned: boolean) {
+    try {
+      await fetch("/api/chat/session", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: sid, pinned: !currentPinned }),
+      })
+      setSessions((prev) =>
+        prev
+          .map((s) => (s.id === sid ? { ...s, pinned: !currentPinned } : s))
+          .sort((a, b) => {
+            if (a.pinned && !b.pinned) return -1
+            if (!a.pinned && b.pinned) return 1
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          }),
+      )
+    } catch {
+      /* silent */
+    }
+    setOpenMenuId(null)
+  }
+
+  function shareSession(sid: string) {
+    const url = `${window.location.origin}/chat?session=${sid}`
+    navigator.clipboard.writeText(url).then(() => {
+      alert("Chat link copied to clipboard!")
+    }).catch(() => {
+      alert("Link: " + url)
+    })
+    setOpenMenuId(null)
   }
 
   const lastAssistantEmpty =
@@ -145,6 +338,152 @@ export default function ChatPage() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#0d0d0d] text-white">
+      {/* Sidebar Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed left-0 top-0 z-50 flex h-full w-72 flex-col border-r border-white/10 bg-[#0d0d0d]/95 backdrop-blur-xl transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+          <div className="flex items-center gap-2">
+            <span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500">
+              <svg viewBox="0 0 24 24" className="size-4 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+              </svg>
+            </span>
+            <span className="text-sm font-semibold text-white">Chat History</span>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="text-xl leading-none text-white/40 transition-colors hover:text-white"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* New Chat Button */}
+        <div className="px-3 py-3">
+          <button
+            onClick={newChat}
+            className="flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-left text-sm text-white/70 transition-all duration-200 hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-white"
+          >
+            <span className="text-lg">✏️</span> New Conversation
+          </button>
+        </div>
+
+        {/* Sessions List */}
+        <div className="flex-1 overflow-y-auto px-3 pb-4">
+          {sessions.length === 0 ? (
+            <div className="mt-8 text-center text-xs text-white/30">
+              No previous conversations yet
+            </div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              {/* Pinned sessions first */}
+              {sessions.some((s) => s.pinned) && (
+                <p className="mb-1 px-1 text-[10px] font-medium tracking-widest text-violet-400/60 uppercase">
+                  📌 Pinned
+                </p>
+              )}
+              {sessions
+                .sort((a, b) => {
+                  if (a.pinned && !b.pinned) return -1
+                  if (!a.pinned && b.pinned) return 1
+                  return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+                })
+                .map((s) => (
+                  <div
+                    key={s.id}
+                    className={`group relative w-full rounded-xl transition-all duration-200 hover:bg-white/[0.06] ${
+                      sessionId === s.id
+                        ? "border border-violet-500/40 bg-violet-500/10"
+                        : "border border-transparent"
+                    }`}
+                  >
+                    {/* Session button */}
+                    <button
+                      onClick={() => loadSession(s.id)}
+                      disabled={loadingSession}
+                      className="w-full px-3 py-2.5 text-left disabled:opacity-50"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        {s.pinned && (
+                          <span className="text-[10px] text-violet-400">📌</span>
+                        )}
+                        <p className="flex-1 truncate text-sm text-white/80">
+                          {s.title && s.title !== "New Conversation" ? s.title : "New Conversation"}
+                        </p>
+                      </div>
+                      <p className="mt-0.5 text-[10px] text-white/30">
+                        {new Date(s.updatedAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </button>
+
+                    {/* 3-dot menu button — visible on hover or when menu open */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setOpenMenuId(openMenuId === s.id ? null : s.id)
+                      }}
+                      className={`absolute top-2.5 right-2 rounded-lg p-1 text-white/40 transition-all hover:bg-white/10 hover:text-white ${
+                        openMenuId === s.id ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                      }`}
+                    >
+                      <svg viewBox="0 0 24 24" className="size-3.5" fill="currentColor">
+                        <circle cx="5" cy="12" r="1.5" />
+                        <circle cx="12" cy="12" r="1.5" />
+                        <circle cx="19" cy="12" r="1.5" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown menu */}
+                    {openMenuId === s.id && (
+                      <div className="absolute top-8 right-2 z-50 min-w-[140px] overflow-hidden rounded-xl border border-white/10 bg-[#1a1a2e] shadow-2xl shadow-black/60 backdrop-blur-xl">
+                        <button
+                          onClick={() => pinSession(s.id, s.pinned)}
+                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
+                        >
+                          <span>📌</span>
+                          {s.pinned ? "Unpin" : "Pin"}
+                        </button>
+                        <button
+                          onClick={() => shareSession(s.id)}
+                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
+                        >
+                          <span>🔗</span>
+                          Share
+                        </button>
+                        <div className="border-t border-white/10" />
+                        <button
+                          onClick={() => deleteSession(s.id)}
+                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-rose-400 transition-colors hover:bg-rose-500/10"
+                        >
+                          <span>🗑️</span>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+      </aside>
+
       <style>{`
         @keyframes particleFloat {
           0%, 100% { transform: translateY(-8px); opacity: 0.25; }
@@ -204,6 +543,17 @@ export default function ChatPage() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/[0.04] backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+              aria-label="Chat history"
+            >
+              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="15" y2="18" />
+              </svg>
+            </button>
             <Link
               href="/"
               aria-label="Back to home"
@@ -260,6 +610,42 @@ export default function ChatPage() {
         className="relative z-10 flex-1 overflow-y-auto px-4 pt-24 pb-40"
       >
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+          {showCrisisBanner && (
+            <div className="mx-auto mb-4 w-full max-w-3xl rounded-2xl border border-rose-500/40 bg-rose-500/10 px-5 py-4 backdrop-blur-md">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-rose-400">
+                    🆘 You&apos;re not alone — immediate help is available
+                  </p>
+                  <p className="mt-1 text-xs text-white/60">
+                    If you&apos;re in crisis, please reach out to a helpline right now:
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-3">
+                    <a
+                      href="tel:988"
+                      className="text-xs font-medium text-cyan-400 hover:underline"
+                    >
+                      📞 988 Suicide & Crisis Lifeline (US)
+                    </a>
+                    <a
+                      href="https://www.befrienders.org"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-medium text-cyan-400 hover:underline"
+                    >
+                      🌍 International: befrienders.org
+                    </a>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowCrisisBanner(false)}
+                  className="shrink-0 text-lg leading-none text-white/40 hover:text-white"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center pt-20 text-center">
               <div className="relative">
