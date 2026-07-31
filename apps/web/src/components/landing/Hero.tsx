@@ -204,7 +204,7 @@ export function Hero() {
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start"
           >
             <Link
-              href="/sign-up"
+              href="/chat"
               className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-7 py-3.5 text-sm font-semibold text-white shadow-xl shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03] hover:shadow-violet-500/50"
             >
               Start for Free

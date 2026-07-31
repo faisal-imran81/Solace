@@ -39,7 +39,7 @@ export function Navbar() {
         </div>
 
         <Link
-          href="/sign-up"
+          href="/chat"
           className="rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-violet-500/25 transition-transform duration-200 hover:scale-105"
         >
           Get Started
