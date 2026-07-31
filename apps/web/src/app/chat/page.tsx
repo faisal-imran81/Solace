@@ -237,13 +237,21 @@ export default function ChatPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={newChat}
-            disabled={isStreaming}
-            className="rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm text-white/80 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            New Chat
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/mood"
+              className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+            >
+              📊 Mood
+            </Link>
+            <button
+              onClick={newChat}
+              disabled={isStreaming}
+              className="rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm text-white/80 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              New Chat
+            </button>
+          </div>
         </div>
       </header>
 
