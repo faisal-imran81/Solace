@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { PenLine, Pin, Link2, Trash2, BarChart3 } from "lucide-react"
+import { PenLine, Pin, Link2, Trash2, BarChart3, MessageSquare, Plus } from "lucide-react"
 
 const ERROR_MESSAGE = "Something went wrong. Please try again."
 
@@ -614,7 +614,7 @@ export default function ChatPage() {
 
       <div
         ref={scrollRef}
-        className="relative z-10 flex-1 overflow-y-auto px-4 pt-24 pb-40"
+        className="relative z-10 flex-1 overflow-y-auto px-4 pt-24 pb-32 sm:pb-40"
       >
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
           {showCrisisBanner && (
@@ -732,8 +732,37 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <footer className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-white/[0.04] backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-3xl items-end gap-3 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      {/* Mobile Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0d0d0d]/95 px-4 py-3 backdrop-blur-xl sm:hidden">
+        <div className="flex flex-col items-center gap-1 text-violet-400">
+          <MessageSquare className="size-5" />
+          <span className="text-[10px]">Chat</span>
+        </div>
+        <Link
+          href="/mood"
+          className="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-fuchsia-400"
+        >
+          <BarChart3 className="size-5" />
+          <span className="text-[10px]">Mood</span>
+        </Link>
+        <Link
+          href="/journal"
+          className="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-violet-400"
+        >
+          <PenLine className="size-5" />
+          <span className="text-[10px]">Journal</span>
+        </Link>
+        <button
+          onClick={newChat}
+          className="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-cyan-400"
+        >
+          <Plus className="size-5" />
+          <span className="text-[10px]">New</span>
+        </button>
+      </nav>
+
+      <footer className="fixed inset-x-0 bottom-16 z-50 border-t border-white/10 bg-white/[0.04] backdrop-blur-xl sm:bottom-0">
+        <div className="mx-auto flex w-full max-w-3xl items-end gap-3 px-4 pt-4 pb-[calc(0.5rem+env(safe-area-inset-bottom))] sm:pb-4">
           <textarea
             ref={textareaRef}
             value={input}
