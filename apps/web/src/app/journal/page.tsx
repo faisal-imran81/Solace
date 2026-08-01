@@ -121,7 +121,7 @@ export default function JournalPage() {
       if (journalId) {
         setIsAnalyzing(true)
         try {
-          const analyzeRes = await fetch("http://localhost:8000/api/v1/journal/analyze", {
+          const analyzeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/api/v1/journal/analyze`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content }),

@@ -29,7 +29,7 @@ type Session = {
   updatedAt: string
 }
 
-const GROQ_API_URL = "http://localhost:8000/api/v1/chat/"
+const GROQ_API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/api/v1/chat/`
 
 const PARTICLES = [
   { top: "14%", left: "8%", size: 5, delay: 0, color: "rgba(34,211,238,0.7)" },
