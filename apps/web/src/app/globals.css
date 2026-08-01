@@ -119,11 +119,40 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+    font-size: 16px;
+    line-height: 1.7;
+  }
   html {
     @apply font-sans;
-    }
+    font-size: 16px;
+  }
+
+  /* Bump up Tailwind's small utility classes site-wide */
+  .text-xs {
+    font-size: 0.8125rem !important;   /* 13px (was 12px) */
+    line-height: 1.6 !important;
+  }
+  .text-sm {
+    font-size: 0.9375rem !important;   /* 15px (was 14px) */
+    line-height: 1.65 !important;
+  }
+  .text-base {
+    font-size: 1.0625rem !important;   /* 17px (was 16px) */
+    line-height: 1.7 !important;
+  }
+
+  /* Inputs, textareas, buttons inherit correct size */
+  input, textarea, button, select {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  /* General paragraph and list text */
+  p, li {
+    font-size: 0.9375rem;
+    line-height: 1.75;
+  }
 }
