@@ -45,6 +45,12 @@ export function Navbar() {
           {isSignedIn ? (
             <>
               <Link
+                href="/dashboard"
+                className="rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white"
+              >
+                Dashboard
+              </Link>
+              <Link
                 href="/chat"
                 className="rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-violet-500/25 transition-transform duration-200 hover:scale-105"
               >
