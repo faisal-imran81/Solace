@@ -44,22 +44,6 @@ Mental health care is a **privilege** — expensive, inaccessible, and often sur
 
 ---
 
-## 📸 Screenshots
-
-| Landing Page | AI Chat |
-|:---:|:---:|
-| `[Screenshot: Landing Page]` | `[Screenshot: AI Chat]` |
-
-| Mood Tracker | Journal & Reflection |
-|:---:|:---:|
-| `[Screenshot: Mood Tracker]` | `[Screenshot: AI Journal]` |
-
-| Wellness Dashboard | Sign In |
-|:---:|:---:|
-| `[Screenshot: Dashboard]` | `[Screenshot: Auth]` |
-
----
-
 ## ✨ Features
 
 ### 🌐 3D Animated Landing Page
