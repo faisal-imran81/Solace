@@ -308,7 +308,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#0d0d0d] text-white">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#0d0d0d] text-white">
       <style>{`
         @keyframes particleFloat {
           0%, 100% { transform: translateY(-8px); opacity: 0.25; }

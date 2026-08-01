@@ -9,7 +9,7 @@ import { Footer } from "@/components/landing/Footer"
 
 export default function Home() {
   return (
-    <div className="dark scroll-smooth bg-[#0a0a0f] text-white antialiased">
+    <div className="dark scroll-smooth overflow-x-hidden bg-[#0a0a0f] text-white antialiased">
       <Navbar />
       <main>
         <Hero />

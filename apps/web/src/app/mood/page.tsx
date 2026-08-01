@@ -112,7 +112,7 @@ export default function MoodPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#0d0d0d] text-white">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#0d0d0d] text-white">
       <style>{`
         @keyframes particleFloat {
           0%, 100% { transform: translateY(-8px); opacity: 0.25; }
@@ -198,13 +198,13 @@ export default function MoodPage() {
               <button
                 key={m.value}
                 onClick={() => setSelectedMood(m.value)}
-                className={`flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-white/30 sm:p-5 ${
+                className={`flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] p-3 backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-white/30 sm:p-5 ${
                   selectedMood === m.value
                     ? "scale-110 border-violet-500/50 bg-violet-500/10 shadow-lg shadow-violet-500/20"
                     : "cursor-pointer"
                 }`}
               >
-                <span className="text-4xl">{m.emoji}</span>
+                <span className="text-2xl sm:text-4xl">{m.emoji}</span>
                 <span className="text-xs font-medium text-white/60">{m.label}</span>
               </button>
             ))}
@@ -227,7 +227,7 @@ export default function MoodPage() {
           </button>
         </section>
 
-        <section className="mt-8 rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+        <section className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
           <h2 className="text-lg font-semibold text-white/90">Your mood this week</h2>
 
           {error && <p className="mt-4 text-sm text-rose-400">{error}</p>}

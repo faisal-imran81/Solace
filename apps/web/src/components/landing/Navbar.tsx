@@ -19,7 +19,7 @@ export function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4"
+      className="fixed inset-x-0 top-0 z-50 flex justify-center overflow-hidden px-4 pt-4"
     >
       <nav className="flex w-full max-w-5xl items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] py-2.5 pr-2.5 pl-4 shadow-2xl shadow-black/40 backdrop-blur-xl">
         <a href="#" className="flex items-center gap-2.5 text-base font-semibold text-white">
@@ -46,7 +46,7 @@ export function Navbar() {
             <>
               <Link
                 href="/dashboard"
-                className="rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white"
+                className="hidden rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white sm:inline-flex"
               >
                 Dashboard
               </Link>

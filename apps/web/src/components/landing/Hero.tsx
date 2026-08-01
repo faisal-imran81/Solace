@@ -185,7 +185,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl"
+            className="text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-7xl"
           >
             <CyclingHeadline />
           </motion.h1>
@@ -194,7 +194,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg lg:mx-0"
+            className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base lg:mx-0"
           >
             AI-powered emotional support, available 24/7, for every human on
             earth. Talk, journal, and grow — completely anonymous.
@@ -204,7 +204,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start"
+            className="mt-10 flex flex-row flex-wrap items-center justify-center gap-4 lg:justify-start"
           >
             <Link
               href="/chat"

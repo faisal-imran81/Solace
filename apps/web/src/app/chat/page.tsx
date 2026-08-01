@@ -338,7 +338,7 @@ export default function ChatPage() {
   const canSend = !isStreaming && input.trim().length > 0
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#0d0d0d] text-white">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#0d0d0d] text-white">
       {/* Sidebar Overlay */}
       {sidebarOpen && (
         <div
@@ -543,26 +543,26 @@ export default function ChatPage() {
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/[0.04] backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
-              aria-label="Chat history"
-            >
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="15" y2="18" />
-              </svg>
-            </button>
-            <Link
-              href="/"
-              aria-label="Back to home"
-              className="rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
-            >
-              <span aria-hidden>←</span>
-            </Link>
-            <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 shadow-lg shadow-violet-500/30">
+            <div className="flex min-w-0 items-center gap-3">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="shrink-0 rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+                aria-label="Chat history"
+              >
+                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="15" y2="18" />
+                </svg>
+              </button>
+              <Link
+                href="/"
+                aria-label="Back to home"
+                className="shrink-0 rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+              >
+                <span aria-hidden>←</span>
+              </Link>
+              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 shadow-lg shadow-violet-500/30">
               <svg
                 viewBox="0 0 24 24"
                 className="size-5 text-white"
@@ -575,29 +575,29 @@ export default function ChatPage() {
                 <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
               </svg>
             </span>
-            <div className="leading-tight">
+            <div className="min-w-0 leading-tight">
               <div className="flex items-center gap-2">
-                <p className="text-base font-semibold text-white">Solace</p>
-                <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-400">
+                <p className="truncate text-base font-semibold text-white">Solace</p>
+                <span className="shrink-0 text-[10px] font-medium text-emerald-400">
                   <span className="size-1.5 animate-pulse rounded-full bg-emerald-400" />
                   online
                 </span>
               </div>
-              <p className="text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
+              <p className="truncate text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
                 AI Mental Health Support
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/mood"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+              className="hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white sm:inline-flex"
             >
               <BarChart3 className="size-3.5 text-fuchsia-400" /> Mood
             </Link>
             <Link
               href="/journal"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+              className="hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white sm:inline-flex"
             >
               <PenLine className="size-3.5 text-violet-400" /> Journal
             </Link>
@@ -693,7 +693,7 @@ export default function ChatPage() {
             messages.map((m, i) =>
               m.role === "user" ? (
                 <div key={i} className="solace-msg flex justify-end">
-                  <div className="max-w-[75%] rounded-2xl rounded-tr-sm bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm text-white shadow-lg shadow-violet-500/20">
+                  <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm text-white shadow-lg shadow-violet-500/20 sm:max-w-[75%]">
                     {m.content}
                   </div>
                 </div>
@@ -703,7 +703,7 @@ export default function ChatPage() {
                     S
                   </span>
                   <div
-                    className={`max-w-[75%] rounded-2xl rounded-tl-sm border border-white/10 bg-white/[0.04] px-4 py-3 text-sm leading-relaxed backdrop-blur-xl ${
+                    className={`max-w-[85%] rounded-2xl rounded-tl-sm border border-white/10 bg-white/[0.04] px-4 py-3 text-sm leading-relaxed backdrop-blur-xl sm:max-w-[75%] ${
                       m.content === ERROR_MESSAGE ? "text-rose-400" : "text-white/90"
                     }`}
                   >
@@ -733,7 +733,7 @@ export default function ChatPage() {
       </div>
 
       <footer className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-white/[0.04] backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-3xl items-end gap-3 px-4 py-4">
+        <div className="mx-auto flex w-full max-w-3xl items-end gap-3 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
           <textarea
             ref={textareaRef}
             value={input}
