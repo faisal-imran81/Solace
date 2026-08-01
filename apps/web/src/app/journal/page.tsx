@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Link from "next/link"
-import { Search, PenLine, Trash2, Plus } from "lucide-react"
+import { Search, PenLine, Trash2, Plus, Pin, Sparkles } from "lucide-react"
 
 type Journal = {
   id: string
@@ -247,7 +247,7 @@ export default function JournalPage() {
               j.pinned ? "bg-violet-500/20 text-violet-400" : "text-white/50 hover:bg-white/10 hover:text-white"
             }`}
           >
-            📌
+            <Pin className="size-4" />
           </button>
           <button
             onClick={() => openEditor(j)}
@@ -394,8 +394,8 @@ export default function JournalPage() {
               <>
                 {pinnedJournals.length > 0 && (
                   <section>
-                    <p className="mb-4 px-1 text-xs font-semibold tracking-[0.2em] text-violet-400/60 uppercase">
-                      📌 Pinned
+                    <p className="mb-4 flex items-center gap-1.5 px-1 text-xs font-semibold tracking-[0.2em] text-violet-400/60 uppercase">
+                      <Pin className="size-3.5" /> Pinned
                     </p>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {pinnedJournals.map(renderJournalCard)}
@@ -474,8 +474,8 @@ export default function JournalPage() {
                 >
                   <div className="mx-auto max-w-6xl rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl shadow-2xl shadow-black/40">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-white">
-                        ✨ Solace&apos;s Reflection
+                      <p className="flex items-center gap-2 text-sm font-semibold text-white">
+                        <Sparkles className="size-4 text-cyan-400" /> Solace&apos;s Reflection
                       </p>
                       {sentiment && SENTIMENT_BADGE[sentiment] && (
                         <span
