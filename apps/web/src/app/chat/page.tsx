@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import { PenLine, Pin, Link2, Trash2, BarChart3 } from "lucide-react"
 
 const ERROR_MESSAGE = "Something went wrong. Please try again."
 
@@ -376,7 +377,7 @@ export default function ChatPage() {
             onClick={newChat}
             className="flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-left text-sm text-white/70 transition-all duration-200 hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-white"
           >
-            <span className="text-lg">✏️</span> New Conversation
+            <PenLine className="size-4 text-violet-400" /> New Conversation
           </button>
         </div>
 
@@ -390,8 +391,8 @@ export default function ChatPage() {
             <div className="flex flex-col gap-1">
               {/* Pinned sessions first */}
               {sessions.some((s) => s.pinned) && (
-                <p className="mb-1 px-1 text-[10px] font-medium tracking-widest text-violet-400/60 uppercase">
-                  📌 Pinned
+                <p className="mb-1 flex items-center gap-1 px-1 text-[10px] font-medium tracking-widest text-violet-400/60 uppercase">
+                  <Pin className="size-3" /> Pinned
                 </p>
               )}
               {sessions
@@ -417,7 +418,7 @@ export default function ChatPage() {
                     >
                       <div className="flex items-center gap-1.5">
                         {s.pinned && (
-                          <span className="text-[10px] text-violet-400">📌</span>
+                          <Pin className="size-3 text-violet-400" />
                         )}
                         <p className="flex-1 truncate text-sm text-white/80">
                           {s.title && s.title !== "New Conversation" ? s.title : "New Conversation"}
@@ -457,14 +458,14 @@ export default function ChatPage() {
                           onClick={() => pinSession(s.id, s.pinned)}
                           className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
                         >
-                          <span>📌</span>
+                          <Pin className="size-3.5" />
                           {s.pinned ? "Unpin" : "Pin"}
                         </button>
                         <button
                           onClick={() => shareSession(s.id)}
                           className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
                         >
-                          <span>🔗</span>
+                          <Link2 className="size-3.5" />
                           Share
                         </button>
                         <div className="border-t border-white/10" />
@@ -472,7 +473,7 @@ export default function ChatPage() {
                           onClick={() => deleteSession(s.id)}
                           className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-rose-400 transition-colors hover:bg-rose-500/10"
                         >
-                          <span>🗑️</span>
+                          <Trash2 className="size-3.5" />
                           Delete
                         </button>
                       </div>
@@ -590,15 +591,15 @@ export default function ChatPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/mood"
-              className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
             >
-              📊 Mood
+              <BarChart3 className="size-3.5 text-fuchsia-400" /> Mood
             </Link>
             <Link
               href="/journal"
-              className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
             >
-              📝 Journal
+              <PenLine className="size-3.5 text-violet-400" /> Journal
             </Link>
             <button
               onClick={newChat}
