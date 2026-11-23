@@ -1,140 +1,90 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { GardenWindow } from "@/components/brand/Garden"
 
 const fadeUp = {
-  initial: { opacity: 0, y: 16 },
+  initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-}
-
-function Aurora() {
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
-      <motion.div
-        className="absolute -top-28 -left-28 size-[28rem] rounded-full bg-violet-600/25 blur-[130px]"
-        animate={{ x: [0, 50, 0], y: [0, 35, 0], scale: [1, 1.12, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute -right-32 -bottom-32 size-[30rem] rounded-full bg-cyan-500/20 blur-[130px]"
-        animate={{ x: [0, -45, 0], y: [0, -40, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-1/4 left-1/2 size-80 -translate-x-1/2 rounded-full bg-fuchsia-500/15 blur-[110px]"
-        animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.08, 1] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
-  )
-}
-
-function Particles() {
-  const particles = [
-    { top: "16%", left: "12%", size: 2, delay: 0, color: "bg-cyan-300/50" },
-    { top: "24%", left: "84%", size: 2, delay: 0.8, color: "bg-violet-300/50" },
-    { top: "58%", left: "8%", size: 3, delay: 1.4, color: "bg-cyan-300/40" },
-    { top: "66%", left: "90%", size: 2, delay: 0.4, color: "bg-fuchsia-300/40" },
-    { top: "42%", left: "94%", size: 3, delay: 2, color: "bg-violet-300/40" },
-    { top: "76%", left: "40%", size: 2, delay: 1.1, color: "bg-cyan-300/40" },
-    { top: "12%", left: "50%", size: 2, delay: 1.7, color: "bg-white/30" },
-    { top: "82%", left: "20%", size: 2, delay: 2.3, color: "bg-white/25" },
-  ]
-
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
-      {particles.map((p, i) => (
-        <motion.span
-          key={i}
-          className={`absolute rounded-full blur-[1px] ${p.color}`}
-          style={{ top: p.top, left: p.left, width: p.size, height: p.size }}
-          animate={{ y: [-10, 10, -10], opacity: [0.15, 0.55, 0.15] }}
-          transition={{ duration: 8, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
-        />
-      ))}
-    </div>
-  )
+  transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
 }
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-36 pb-20">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_72%)]"
-      />
-      <Aurora />
-      <Particles />
+    <section className="relative overflow-hidden px-5 pt-32 pb-20 sm:pt-40 lg:pb-28">
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 -right-24 size-[28rem] rounded-[45%_55%_60%_40%/50%_45%_55%_50%] bg-sage-soft opacity-70 blur-3xl dark:opacity-50" />
+        <div className="absolute bottom-0 -left-32 size-[24rem] rounded-[60%_40%_45%_55%/55%_50%_50%_45%] bg-clay-soft opacity-60 blur-3xl dark:opacity-30" />
+      </div>
 
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2"
-        animate={{ scale: [1, 1.04, 1], opacity: [0.55, 0.9, 0.55] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="size-full rounded-full bg-violet-500/10 blur-[100px]" />
-      </motion.div>
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <motion.span
+            {...fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs font-medium text-muted-foreground shadow-soft"
+          >
+            <span aria-hidden className="size-1.5 rounded-full bg-sage" />
+            24/7 emotional support
+          </motion.span>
 
-      <div className="relative flex w-full max-w-3xl flex-col items-center text-center">
-        <motion.span
-          {...fadeUp}
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-white/60 uppercase backdrop-blur-md"
-        >
-          <Sparkles className="size-3.5 text-cyan-300" />
-          <span aria-hidden className="size-1.5 rounded-full bg-emerald-400" />
-          24/7 emotional support
-        </motion.span>
+          <motion.h1
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.08 }}
+            className="mt-6 font-heading text-5xl leading-[1.05] font-normal tracking-tight text-balance text-foreground sm:text-6xl md:text-7xl"
+          >
+            A quiet place to{" "}
+            <em className="font-normal text-sage-strong italic">be heard.</em>
+          </motion.h1>
 
-        <motion.h1
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.08 }}
-          className="mt-6 text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl md:text-6xl"
-        >
-          A quiet place to{" "}
-          <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-            be heard.
-          </span>
-        </motion.h1>
+          <motion.p
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.16 }}
+            className="mt-6 max-w-xl text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg"
+          >
+            Talk through what&apos;s on your mind, write in a private journal and
+            see how your mood shifts across the week. Only you can see what you write.
+          </motion.p>
 
-        <motion.p
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.16 }}
-          className="mt-6 max-w-xl text-base leading-relaxed text-pretty text-white/60 sm:text-lg"
-        >
-          Talk through what&apos;s on your mind, write in a private journal and
-          see how your mood shifts across the week. Only you can see what you write.
-        </motion.p>
+          <motion.div
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.24 }}
+            className="mt-10 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center"
+          >
+            <Link
+              href="/chat"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-lift transition-colors duration-200 hover:bg-primary/90"
+            >
+              Start for free
+              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </Link>
+            <a
+              href="#how-it-works"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-line-strong bg-card/60 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:bg-card"
+            >
+              See how it works
+            </a>
+          </motion.div>
+
+          <motion.p
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.32 }}
+            className="mt-8 text-xs text-faint"
+          >
+            Free to use&ensp;·&ensp;No credit card&ensp;·&ensp;Private to your account
+          </motion.p>
+        </div>
 
         <motion.div
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.24 }}
-          className="mt-10 flex flex-col items-center gap-3 sm:flex-row"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="relative mx-auto w-full max-w-[19rem] sm:max-w-sm lg:max-w-md"
         >
-          <Link
-            href="/chat"
-            className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-[filter,box-shadow] duration-200 hover:shadow-violet-500/40 hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            Start for free
-            <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </Link>
-          <a
-            href="#how-it-works"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-md transition-colors duration-200 hover:border-white/35 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            See how it works
-          </a>
+          <div aria-hidden className="absolute inset-x-6 -bottom-4 h-10 rounded-[50%] bg-foreground/10 blur-xl" />
+          <GardenWindow className="relative drop-shadow-sm" />
         </motion.div>
-
-        <motion.p
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.32 }}
-          className="mt-8 text-xs text-white/40"
-        >
-          Free to use&ensp;·&ensp;No credit card&ensp;·&ensp;Private to your account
-        </motion.p>
       </div>
     </section>
   )
