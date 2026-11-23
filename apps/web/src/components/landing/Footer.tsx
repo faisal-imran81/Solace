@@ -34,7 +34,7 @@ export function Footer() {
       </div>
 
       <p className="mt-10 text-center text-xs text-white/40">
-        © 2025 Solace. Built with ❤️ for mental health accessibility.
+        © 2025 Solace. Built with ❤️ to make mental health support easier to reach.
       </p>
     </footer>
   )
