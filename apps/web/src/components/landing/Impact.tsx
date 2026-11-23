@@ -28,10 +28,10 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 }
 
 const stats = [
-  { value: 50000, suffix: "+", label: "Users Supported" },
-  { value: 2, suffix: "M+", label: "Conversations" },
-  { value: 98, suffix: "%", label: "Feel Less Alone" },
-  { value: 24, suffix: "/7", label: "Always Available" },
+  { value: 24, suffix: "/7", label: "Chat whenever you need to" },
+  { value: 5, suffix: "", label: "Moods to choose from" },
+  { value: 7, suffix: "-day", label: "Mood chart on your dashboard" },
+  { value: 4, suffix: "", label: "Rounds of guided 4-7-8 breathing" },
 ]
 
 export function Impact() {
