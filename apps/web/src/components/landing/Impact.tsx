@@ -36,23 +36,24 @@ const stats = [
 
 export function Impact() {
   return (
-    <section className="relative px-4 py-28">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]" />
-
+    <section className="relative px-5 py-24 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mx-auto max-w-5xl rounded-3xl border border-white/10 bg-white/[0.03] px-8 py-16 backdrop-blur-xl"
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="relative mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-sage-soft px-6 py-14 sm:px-10 sm:py-16"
       >
-        <div className="grid grid-cols-2 gap-12 text-center lg:grid-cols-4">
+        <svg aria-hidden viewBox="0 0 200 200" className="absolute -right-16 -bottom-20 w-72 text-sage/25">
+          <path fill="currentColor" d="M30 170C30 90 80 34 170 30c0 92-52 140-140 140Z" />
+        </svg>
+        <div className="relative grid grid-cols-2 gap-x-6 gap-y-12 text-center lg:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.label}>
-              <p className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-5xl font-black tracking-tight text-transparent">
+              <p className="font-heading text-5xl font-light tracking-tight text-primary sm:text-6xl">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </p>
-              <p className="mt-3 text-sm text-white/60">{stat.label}</p>
+              <p className="mx-auto mt-3 max-w-[12rem] text-sm text-secondary-foreground">{stat.label}</p>
             </div>
           ))}
         </div>
