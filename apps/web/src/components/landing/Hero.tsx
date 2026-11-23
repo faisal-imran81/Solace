@@ -104,8 +104,8 @@ export function Hero() {
           transition={{ ...fadeUp.transition, delay: 0.16 }}
           className="mt-6 max-w-xl text-base leading-relaxed text-pretty text-white/60 sm:text-lg"
         >
-          Talk through what&apos;s on your mind, journal freely, and understand
-          your moods — completely anonymous, in a space built to let you breathe.
+          Talk through what&apos;s on your mind, write in a private journal and
+          see how your mood shifts across the week. Only you can see what you write.
         </motion.p>
 
         <motion.div
@@ -133,7 +133,7 @@ export function Hero() {
           transition={{ ...fadeUp.transition, delay: 0.32 }}
           className="mt-8 text-xs text-white/40"
         >
-          Free forever&ensp;·&ensp;No credit card&ensp;·&ensp;100% anonymous
+          Free to use&ensp;·&ensp;No credit card&ensp;·&ensp;Private to your account
         </motion.p>
       </div>
     </section>
