@@ -4,8 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type { ReactNode } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Link from "next/link"
+import { GardenBackdrop, GardenNook } from "@/components/brand/Garden"
+import { PageHeader } from "@/components/app/PageHeader"
+import { MobileNav } from "@/components/landing/MobileNav"
 import {
-  Sparkles,
+  Leaf,
   ArrowRight,
   PenLine,
   Plus,
@@ -60,18 +63,11 @@ const BAR_HEIGHTS: Record<number, string> = {
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
 const SENTIMENT_BADGE: Record<string, { label: string; className: string }> = {
-  positive: { label: "😊 Positive", className: "bg-emerald-500/20 text-emerald-400" },
-  negative: { label: "😔 Difficult", className: "bg-rose-500/20 text-rose-400" },
-  neutral: { label: "😐 Neutral", className: "bg-blue-500/20 text-blue-400" },
+  positive: { label: "😊 Positive", className: "bg-sage-soft text-sage-strong" },
+  negative: { label: "😔 Difficult", className: "bg-clay-soft text-clay-strong" },
+  neutral: { label: "😐 Neutral", className: "bg-muted text-muted-foreground" },
 }
 
-const PARTICLES = [
-  { top: "14%", left: "8%", size: 5, delay: 0, color: "rgba(34,211,238,0.7)" },
-  { top: "28%", left: "88%", size: 4, delay: 0.6, color: "rgba(217,70,239,0.6)" },
-  { top: "58%", left: "5%", size: 6, delay: 1.2, color: "rgba(139,92,246,0.7)" },
-  { top: "72%", left: "92%", size: 3, delay: 0.3, color: "rgba(34,211,238,0.6)" },
-  { top: "44%", left: "95%", size: 4, delay: 0.9, color: "rgba(139,92,246,0.6)" },
-]
 
 type QuickAction = {
   icon: ReactNode
@@ -80,10 +76,10 @@ type QuickAction = {
 }
 
 const QUICK_ACTIONS: QuickAction[] = [
-  { icon: <MessageCircle className="size-5 text-cyan-400" />, label: "New Chat", href: "/chat" },
-  { icon: <PenLine className="size-5 text-violet-400" />, label: "New Journal", href: "/journal" },
-  { icon: <Smile className="size-5 text-fuchsia-400" />, label: "Log Mood", href: "/mood" },
-  { icon: <BarChart3 className="size-5 text-emerald-400" />, label: "View Stats", href: "#mood-chart" },
+  { icon: <MessageCircle className="size-5 text-sage-strong" strokeWidth={1.75} />, label: "New Chat", href: "/chat" },
+  { icon: <PenLine className="size-5 text-sage-strong" strokeWidth={1.75} />, label: "New Journal", href: "/journal" },
+  { icon: <Smile className="size-5 text-clay-strong" strokeWidth={1.75} />, label: "Log Mood", href: "/mood" },
+  { icon: <BarChart3 className="size-5 text-sage-strong" strokeWidth={1.75} />, label: "View Stats", href: "#mood-chart" },
 ]
 
 function getLast7Days() {
@@ -209,7 +205,7 @@ export default function DashboardPage() {
       setAffirmation(data.reflection)
     } catch {
       setAffirmation(
-        "Some days are harder than others. Getting through this one still counts. 💜",
+        "Some days are harder than others. Getting through this one still counts. 🌿",
       )
     } finally {
       setAffirmationLoading(false)
@@ -252,9 +248,6 @@ export default function DashboardPage() {
     [moodEntries, journals, sessions],
   )
   const animatedScore = useCountUp(score)
-
-  const scoreColor =
-    score < 40 ? "#f43f5e" : score <= 70 ? "#f59e0b" : "#10b981"
 
   const avgMood =
     moodEntries.length > 0
@@ -299,101 +292,47 @@ export default function DashboardPage() {
 
   function renderSkeleton() {
     return (
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-72 animate-pulse rounded-3xl bg-white/[0.06]" />
+          <div key={i} className="h-72 animate-pulse rounded-3xl bg-muted" />
         ))}
       </div>
     )
   }
 
+  const card = "surface rounded-3xl p-6"
+  const reveal = {
+    initial: { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+  }
+  const calm = [0.22, 1, 0.36, 1] as const
+
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#0d0d0d] text-white">
-      <style>{`
-        @keyframes particleFloat {
-          0%, 100% { transform: translateY(-8px); opacity: 0.25; }
-          50% { transform: translateY(8px); opacity: 1; }
-        }
-        @keyframes blobDrift {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(40px, 30px) scale(1.08); }
-          66% { transform: translate(-30px, -20px) scale(0.95); }
-        }
-        .solace-particle { animation: particleFloat 5s ease-in-out infinite; }
-      `}</style>
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
+      <GardenBackdrop />
 
-      <div className="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+      <PageHeader title="Dashboard" subtitle="Your wellness overview" />
 
-      <div
-        className="pointer-events-none fixed -top-64 -left-64 z-0 size-[600px] rounded-full bg-violet-600/25 blur-[120px]"
-        style={{ animation: "blobDrift 16s ease-in-out infinite" }}
-      />
-      <div
-        className="pointer-events-none fixed -right-40 -bottom-40 z-0 size-[500px] rounded-full bg-cyan-500/20 blur-[120px]"
-        style={{ animation: "blobDrift 20s ease-in-out infinite reverse" }}
-      />
-      <div
-        className="pointer-events-none fixed top-1/4 right-1/3 z-0 size-72 rounded-full bg-fuchsia-600/20 blur-[100px]"
-        style={{ animation: "blobDrift 24s ease-in-out infinite" }}
-      />
-
-      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
-        {PARTICLES.map((p, i) => (
-          <span
-            key={i}
-            className="solace-particle absolute rounded-full blur-[1px]"
-            style={{
-              top: p.top,
-              left: p.left,
-              width: p.size,
-              height: p.size,
-              backgroundColor: p.color,
-              animationDelay: `${p.delay}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/[0.04] backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              aria-label="Back to home"
-              className="rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
-            >
-              <span aria-hidden>←</span>
-            </Link>
-            <div className="leading-tight">
-              <h1 className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-lg font-bold tracking-tight text-transparent">
-                Dashboard
-              </h1>
-              <p className="text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
-                Your wellness overview
-              </p>
-            </div>
-          </div>
-          <span className="hidden text-sm font-medium text-white/70 sm:block">
+      <main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-4 pt-24 pb-28 sm:pt-28 sm:pb-16">
+        <div className="animate-rise mb-8">
+          <p className="font-heading text-3xl font-normal text-foreground sm:text-4xl">
             {getGreeting()}
-          </span>
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Here&apos;s a gentle look at your week.
+          </p>
         </div>
-      </header>
 
-      <main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-4 pt-24 pb-16">
         {loading ? (
           renderSkeleton()
         ) : (
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-6 lg:grid-cols-3">
-              {/* Widget 1 — Wellness Score */}
-              <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl"
-              >
-                <h2 className="text-sm font-semibold text-white/80">Wellness Score</h2>
+          <div className="flex flex-col gap-5">
+            <div className="grid gap-5 lg:grid-cols-3">
+              {/* Widget 1: Wellness Score */}
+              <motion.section {...reveal} transition={{ duration: 0.7, ease: calm }} className={card}>
+                <h2 className="font-heading text-lg font-medium text-foreground">Wellness Score</h2>
+                <p className="text-xs text-faint">From your recent check-ins. A rough guide, not a grade.</p>
                 <div className="relative mx-auto mt-5 size-40">
                   <svg viewBox="0 0 120 120" className="size-full -rotate-90">
                     <circle
@@ -401,16 +340,16 @@ export default function DashboardPage() {
                       cy="60"
                       r={RING_RADIUS}
                       fill="none"
-                      stroke="rgba(255,255,255,0.08)"
-                      strokeWidth="10"
+                      className="stroke-muted"
+                      strokeWidth="8"
                     />
                     <motion.circle
                       cx="60"
                       cy="60"
                       r={RING_RADIUS}
                       fill="none"
-                      stroke={scoreColor}
-                      strokeWidth="10"
+                      className="stroke-sage"
+                      strokeWidth="8"
                       strokeLinecap="round"
                       strokeDasharray={RING_CIRCUMFERENCE}
                       initial={{ strokeDashoffset: RING_CIRCUMFERENCE }}
@@ -420,59 +359,59 @@ export default function DashboardPage() {
                           (1 - animatedScore / 100),
                       }}
                       transition={{ duration: 1.5, ease: "easeOut" }}
-                      style={{ filter: `drop-shadow(0 0 8px ${scoreColor}55)` }}
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <p className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-4xl font-black text-transparent">
+                    <p className="font-heading text-4xl font-light text-foreground">
                       {animatedScore}
                     </p>
-                    <p className="mt-1 text-[10px] tracking-widest text-white/40 uppercase">
+                    <p className="text-[11px] text-faint">
                       / 100
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-4 text-center">
+                <div className="mt-6 grid grid-cols-3 gap-2 border-t border-border pt-4 text-center">
                   <div>
                     <p className="text-lg">
                       {moodEntries.length > 0 ? avgMoodInfo.emoji : "—"}
                     </p>
-                    <p className="mt-1 text-[10px] text-white/50">Avg Mood</p>
-                    <p className="text-xs font-semibold text-white/80">
+                    <p className="mt-1 text-[11px] text-faint">Avg Mood</p>
+                    <p className="text-xs font-semibold text-foreground">
                       {moodEntries.length > 0 ? avgMood.toFixed(1) : "0.0"}
                     </p>
                   </div>
                   <div>
-                    <PenLine className="mx-auto size-5 text-violet-400" />
-                    <p className="mt-1 text-[10px] text-white/50">Entries</p>
-                    <p className="text-xs font-semibold text-white/80">{journals.length}</p>
+                    <PenLine className="mx-auto size-5 text-sage-strong" strokeWidth={1.75} />
+                    <p className="mt-1 text-[11px] text-faint">Entries</p>
+                    <p className="text-xs font-semibold text-foreground">{journals.length}</p>
                   </div>
                   <div>
-                    <MessageCircle className="mx-auto size-5 text-cyan-400" />
-                    <p className="mt-1 text-[10px] text-white/50">Sessions</p>
-                    <p className="text-xs font-semibold text-white/80">{sessions.length}</p>
+                    <MessageCircle className="mx-auto size-5 text-clay-strong" strokeWidth={1.75} />
+                    <p className="mt-1 text-[11px] text-faint">Sessions</p>
+                    <p className="text-xs font-semibold text-foreground">{sessions.length}</p>
                   </div>
                 </div>
               </motion.section>
 
-              {/* Widget 2 — Mood Trend Chart */}
+              {/* Widget 2: Mood Trend Chart */}
               <motion.section
                 id="mood-chart"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="scroll-mt-24 rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl lg:col-span-2"
+                {...reveal}
+                transition={{ duration: 0.7, delay: 0.08, ease: calm }}
+                className={`${card} scroll-mt-24 lg:col-span-2`}
               >
-                <h2 className="text-sm font-semibold text-white/80">Mood This Week</h2>
+                <h2 className="font-heading text-lg font-medium text-foreground">Mood This Week</h2>
                 {moodEntries.length === 0 ? (
-                  <p className="py-16 text-center text-sm text-white/40">
-                    Log your first mood to see trends
-                  </p>
+                  <div className="flex flex-col items-center py-8 text-center">
+                    <GardenNook className="size-24" />
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      Log your first mood to see trends
+                    </p>
+                  </div>
                 ) : (
-                  <div className="mt-6 flex h-40 items-end gap-2 sm:gap-3">
-                    {days.map((day) => {
+                  <div className="mt-8 flex h-40 items-end gap-2 sm:gap-3">
+                    {days.map((day, i) => {
                       const entry = entryForDay(day)
                       const moodInfo = entry
                         ? MOODS.find((m) => m.value === entry.mood)
@@ -484,25 +423,27 @@ export default function DashboardPage() {
                         >
                           <div className="flex h-40 w-full items-end">
                             {entry && (
-                              <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 rounded-lg border border-white/10 bg-[#0d0d0d]/90 px-3 py-1.5 text-xs whitespace-nowrap text-white/90 opacity-0 backdrop-blur-xl transition-opacity duration-200 group-hover:opacity-100">
+                              <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 rounded-xl border border-border bg-popover px-3 py-1.5 text-xs whitespace-nowrap text-popover-foreground opacity-0 shadow-lift transition-opacity duration-200 group-hover:opacity-100">
                                 <span className="mr-1">{moodInfo?.emoji}</span>
                                 {entry.note ? entry.note : moodInfo?.label}
                               </div>
                             )}
-                            <div
-                              className={`w-full rounded-full transition-all duration-500 ${
-                                entry
-                                  ? "bg-gradient-to-t from-violet-500 to-cyan-400 shadow-lg shadow-violet-500/20"
-                                  : "bg-white/10"
-                              }`}
-                              style={{
+                            <motion.div
+                              initial={{ height: 0 }}
+                              animate={{
                                 height: entry
                                   ? BAR_HEIGHTS[entry.mood] ?? "20%"
                                   : "8px",
                               }}
+                              transition={{ duration: 0.9, delay: i * 0.06, ease: calm }}
+                              className={`w-full ${
+                                entry
+                                  ? "rounded-t-full rounded-b-md bg-sage"
+                                  : "rounded-full bg-muted"
+                              }`}
                             />
                           </div>
-                          <span className="mt-2 text-xs text-white/40">
+                          <span className="mt-2 text-xs text-faint">
                             {WEEKDAYS[day.getDay()]}
                           </span>
                         </div>
@@ -512,57 +453,51 @@ export default function DashboardPage() {
                 )}
               </motion.section>
 
-              {/* Widget 3 — Daily Affirmation */}
+              {/* Widget 3: Daily Affirmation */}
               <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl"
-                style={{
-                  borderLeft: "4px solid",
-                  borderImage:
-                    "linear-gradient(to bottom, #8b5cf6, #22d3ee) 1",
-                }}
+                {...reveal}
+                transition={{ duration: 0.7, delay: 0.16, ease: calm }}
+                className="leaf-corner relative overflow-hidden bg-clay-soft p-6 lg:col-span-3"
               >
-                <h2 className="flex items-center gap-2 text-sm font-semibold text-white/80">
-                  <Sparkles className="size-4 text-cyan-400" /> Daily Affirmation
+                <svg aria-hidden viewBox="0 0 100 100" className="absolute -top-6 -right-6 w-32 text-clay/20">
+                  <path fill="currentColor" d="M12 88C12 44 40 14 88 12c0 48-30 76-76 76Z" />
+                </svg>
+                <h2 className="relative flex items-center gap-2 text-sm font-semibold text-clay-strong">
+                  <Leaf className="size-4" strokeWidth={1.75} /> Daily Affirmation
                 </h2>
                 {affirmationLoading ? (
-                  <div className="mt-5 space-y-2">
-                    <div className="h-3 w-full animate-pulse rounded-full bg-white/[0.08]" />
-                    <div className="h-3 w-3/4 animate-pulse rounded-full bg-white/[0.08]" />
+                  <div className="relative mt-5 space-y-2">
+                    <div className="h-3 w-full animate-pulse rounded-full bg-clay/20" />
+                    <div className="h-3 w-3/4 animate-pulse rounded-full bg-clay/20" />
                   </div>
                 ) : (
-                  <p className="mt-5 text-sm leading-relaxed text-white/80 italic">
+                  <p className="relative mt-4 max-w-3xl font-heading text-xl leading-relaxed text-foreground italic">
                     &ldquo;{affirmation}&rdquo;
                   </p>
                 )}
                 <button
                   onClick={fetchAffirmation}
-                  className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+                  className="relative mt-5 inline-flex items-center gap-2 rounded-full border border-clay/30 bg-card/60 px-4 py-1.5 text-xs font-medium text-clay-strong transition-colors duration-200 hover:bg-card"
                 >
                   <RefreshCw className="size-3" /> New Affirmation
                 </button>
               </motion.section>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-3">
-              {/* Widget 4 — Recent Journal Entries */}
+            <div className="grid gap-5 lg:grid-cols-3">
+              {/* Widget 4: Recent Journal Entries */}
               <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl lg:col-span-2"
+                {...reveal}
+                transition={{ duration: 0.7, delay: 0.08, ease: calm }}
+                className={`${card} lg:col-span-2`}
               >
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-white/80">
+                  <h2 className="font-heading text-lg font-medium text-foreground">
                     Recent Journal Entries
                   </h2>
                   <Link
                     href="/journal"
-                    className="flex items-center gap-1 text-xs text-cyan-400 transition-colors hover:text-white"
+                    className="flex items-center gap-1 rounded-full text-xs font-medium text-sage-strong transition-colors hover:text-foreground"
                   >
                     View All <ArrowRight className="size-3" />
                   </Link>
@@ -570,10 +505,10 @@ export default function DashboardPage() {
 
                 {journals.length === 0 ? (
                   <div className="py-10 text-center">
-                    <p className="text-sm text-white/40">No journal entries yet</p>
+                    <p className="text-sm text-muted-foreground">No journal entries yet</p>
                     <Link
                       href="/journal"
-                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-2 text-xs font-semibold text-white shadow-lg shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03]"
+                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
                     >
                       <PenLine className="size-3.5" /> Write Your First Entry
                     </Link>
@@ -588,18 +523,18 @@ export default function DashboardPage() {
                         <Link
                           key={j.id}
                           href="/journal"
-                          className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-colors duration-200 hover:border-violet-500/40"
+                          className="flex items-start justify-between gap-4 rounded-2xl border border-border bg-background p-4 transition-colors duration-200 hover:border-line-strong"
                         >
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="truncate text-sm font-semibold text-white">
+                              <p className="truncate text-sm font-semibold text-foreground">
                                 {j.title}
                               </p>
                               {j.pinned && (
-                                <Pin className="size-3 text-violet-400" />
+                                <Pin className="size-3 text-sage-strong" />
                               )}
                             </div>
-                            <p className="mt-1 line-clamp-2 text-xs text-white/60">
+                            <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                               {j.content.slice(0, 80)}
                               {j.content.length > 80 ? "..." : ""}
                             </p>
@@ -607,12 +542,12 @@ export default function DashboardPage() {
                           <div className="flex shrink-0 flex-col items-end gap-2">
                             {badge && (
                               <span
-                                className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${badge.className}`}
+                                className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${badge.className}`}
                               >
                                 {badge.label}
                               </span>
                             )}
-                            <p className="text-[10px] text-white/30">
+                            <p className="text-[11px] text-faint">
                               {new Date(j.updatedAt).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
@@ -626,21 +561,19 @@ export default function DashboardPage() {
                 )}
               </motion.section>
 
-              {/* Widget 5 — Recent Chat Sessions */}
+              {/* Widget 5: Recent Chat Sessions */}
               <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl"
+                {...reveal}
+                transition={{ duration: 0.7, delay: 0.16, ease: calm }}
+                className={card}
               >
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-white/80">
+                  <h2 className="font-heading text-lg font-medium text-foreground">
                     Recent Chats
                   </h2>
                   <Link
                     href="/chat"
-                    className="flex items-center gap-1 text-xs text-cyan-400 transition-colors hover:text-white"
+                    className="flex items-center gap-1 rounded-full text-xs font-medium text-sage-strong transition-colors hover:text-foreground"
                   >
                     Open Chat <ArrowRight className="size-3" />
                   </Link>
@@ -648,12 +581,12 @@ export default function DashboardPage() {
 
                 {sessions.length === 0 ? (
                   <div className="py-10 text-center">
-                    <p className="text-sm text-white/40">
+                    <p className="text-sm text-muted-foreground">
                       Start your first conversation
                     </p>
                     <Link
                       href="/chat"
-                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-2 text-xs font-semibold text-white shadow-lg shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03]"
+                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
                     >
                       <MessageCircle className="size-3.5" /> Start Chatting
                     </Link>
@@ -664,21 +597,21 @@ export default function DashboardPage() {
                       <Link
                         key={s.id}
                         href="/chat"
-                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 transition-colors duration-200 hover:border-violet-500/40"
+                        className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-background px-4 py-3 transition-colors duration-200 hover:border-line-strong"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="flex items-center gap-1.5 truncate text-sm text-white/80">
-                            {s.pinned && <Pin className="size-3 text-violet-400" />}
+                          <p className="flex items-center gap-1.5 truncate text-sm text-foreground">
+                            {s.pinned && <Pin className="size-3 shrink-0 text-sage-strong" />}
                             {s.title ?? "New Conversation"}
                           </p>
-                          <p className="mt-0.5 text-[10px] text-white/30">
+                          <p className="mt-0.5 text-[11px] text-faint">
                             {new Date(s.updatedAt).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
                             })}
                           </p>
                         </div>
-                        <MessageCircle className="size-4 shrink-0 text-white/30" />
+                        <MessageCircle className="size-4 shrink-0 text-faint" />
                       </Link>
                     ))}
                   </div>
@@ -686,37 +619,40 @@ export default function DashboardPage() {
               </motion.section>
             </div>
 
-            {/* Widget 6 — Breathing Exercise */}
+            {/* Widget 6: Breathing Exercise */}
             <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl"
+              {...reveal}
+              transition={{ duration: 0.7, delay: 0.12, ease: calm }}
+              className="surface relative overflow-hidden rounded-3xl p-8"
             >
               <div className="flex flex-col items-center">
-                <h2 className="text-sm font-semibold text-white/80">
+                <h2 className="font-heading text-2xl font-normal text-foreground">
                   4-7-8 Breathing
                 </h2>
-                <p className="mt-1 text-xs text-white/40">
+                <p className="mt-1 text-sm text-muted-foreground">
                   In for 4, hold for 7, out for 8
                 </p>
 
-                <div className="relative mt-10 flex h-56 w-56 items-center justify-center">
+                <div className="relative mt-10 flex h-60 w-60 items-center justify-center">
                   <motion.div
-                    className="absolute inset-0 rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 opacity-60 blur-2xl"
-                    animate={{ scale: breathingScale * 0.9 }}
+                    className="absolute inset-0 rounded-full bg-sage-soft"
+                    animate={{ scale: breathingScale * 0.72 }}
                     transition={{ duration: breathingDuration, ease: "easeInOut" }}
                   />
                   <motion.div
-                    className="relative grid size-40 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 shadow-2xl shadow-violet-500/40"
-                    animate={{ scale: breathingScale }}
+                    className="absolute inset-6 rounded-full border border-sage/50"
+                    animate={{ scale: breathingScale * 0.8 }}
+                    transition={{ duration: breathingDuration, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="relative grid size-32 place-items-center rounded-full bg-primary text-primary-foreground shadow-lift"
+                    animate={{ scale: breathingScale * 0.85 }}
                     transition={{ duration: breathingDuration, ease: "easeInOut" }}
                   >
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-white">{phaseLabel}</p>
+                    <div className="text-center" aria-live="polite">
+                      <p className="text-sm font-semibold">{phaseLabel}</p>
                       {phase !== "idle" && (
-                        <p className="mt-1 text-2xl font-black text-white">
+                        <p className="mt-0.5 font-heading text-3xl font-light">
                           {countdown}
                         </p>
                       )}
@@ -724,7 +660,7 @@ export default function DashboardPage() {
                   </motion.div>
                 </div>
 
-                <p className="mt-8 text-xs text-white/50">
+                <p className="mt-8 text-sm text-muted-foreground">
                   {phase === "idle"
                     ? "Four slow rounds. Press start when you're ready."
                     : `Cycle ${Math.min(cycle + 1, 4)} of 4`}
@@ -738,14 +674,14 @@ export default function DashboardPage() {
                         setPhase("inhale")
                         setCountdown(4)
                       }}
-                      className="rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03]"
+                      className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
                     >
                       Start
                     </button>
                   ) : (
                     <button
                       onClick={stopBreathing}
-                      className="rounded-full border border-white/15 bg-white/[0.04] px-8 py-3 text-sm font-semibold text-white/70 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
+                      className="rounded-full border border-line-strong bg-background px-8 py-3 text-sm font-semibold text-foreground transition-colors duration-200 hover:bg-muted"
                     >
                       Stop
                     </button>
@@ -754,31 +690,29 @@ export default function DashboardPage() {
               </div>
             </motion.section>
 
-            {/* Widget 7 — Quick Actions */}
+            {/* Widget 7: Quick Actions */}
             <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl"
+              {...reveal}
+              transition={{ duration: 0.7, delay: 0.16, ease: calm }}
+              className="surface rounded-3xl p-3 sm:p-4"
             >
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {QUICK_ACTIONS.map((action) => {
                   const inner = (
                     <>
-                      <span>{action.icon}</span>
-                      <span className="text-xs font-medium text-white/70">
+                      <span className="grid size-11 place-items-center rounded-[45%_55%_50%_50%/55%_45%_55%_45%] bg-muted">
+                        {action.icon}
+                      </span>
+                      <span className="text-xs font-medium text-foreground">
                         {action.label}
                       </span>
                     </>
                   )
+                  const tile =
+                    "flex flex-col items-center gap-2 rounded-2xl border border-border bg-background py-5 transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-soft"
                   if (action.href.startsWith("#")) {
                     return (
-                      <a
-                        key={action.label}
-                        href={action.href}
-                        className="flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] py-5 transition-all duration-200 hover:border-violet-500/40 hover:shadow-lg hover:shadow-violet-500/20"
-                      >
+                      <a key={action.label} href={action.href} className={tile}>
                         {inner}
                       </a>
                     )
@@ -786,13 +720,10 @@ export default function DashboardPage() {
                   return (
                     <motion.div
                       key={action.label}
-                      whileHover={{ scale: 1.03 }}
-                      transition={{ duration: 0.2 }}
+                      whileHover={{ y: -2 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <Link
-                        href={action.href}
-                        className="flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] py-5 transition-all duration-200 hover:border-violet-500/40 hover:shadow-lg hover:shadow-violet-500/20"
-                      >
+                      <Link href={action.href} className={tile}>
                         {inner}
                       </Link>
                     </motion.div>
@@ -803,6 +734,8 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
+
+      <MobileNav />
     </div>
   )
 }
