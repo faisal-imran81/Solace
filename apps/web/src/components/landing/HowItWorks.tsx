@@ -1,7 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { UserPlus, MessageCircle, TrendingUp, type LucideIcon } from "lucide-react"
+import { UserPlus, MessageCircle, Sprout, type LucideIcon } from "lucide-react"
+import { SectionLabel } from "./SectionLabel"
 
 const steps: {
   icon: LucideIcon
@@ -24,7 +25,7 @@ const steps: {
       "Start a chat, log your mood or write a journal entry. Begin with whatever you need today.",
   },
   {
-    icon: TrendingUp,
+    icon: Sprout,
     number: "03",
     title: "See your week",
     description:
@@ -34,52 +35,65 @@ const steps: {
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative scroll-mt-24 px-4 py-28">
-      <div className="pointer-events-none absolute top-1/4 right-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]" />
+    <section id="how-it-works" className="relative scroll-mt-24 bg-card/60 px-5 py-24 sm:py-28">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-border" />
+      <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-border" />
 
       <div className="relative mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
-            How it works
-          </span>
-          <h2 className="mt-4 bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-5xl">
+          <SectionLabel>How it works</SectionLabel>
+          <h2 className="mt-4 font-heading text-4xl font-normal tracking-tight text-foreground sm:text-5xl">
             Getting started is quick
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-white/60">
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
             Sign up, pick a place to start, and come back whenever you need to.
           </p>
         </motion.div>
 
         <div className="relative mt-20">
-          <div className="absolute top-8 right-[16%] left-[16%] hidden border-t-2 border-dashed border-white/15 lg:block" />
+          <svg
+            aria-hidden
+            viewBox="0 0 1000 40"
+            preserveAspectRatio="none"
+            className="absolute top-7 right-[16%] left-[16%] hidden h-10 w-[68%] lg:block"
+          >
+            <path
+              d="M0 20 C 120 0, 240 40, 360 20 S 600 0, 720 20 S 900 40, 1000 20"
+              className="stroke-line-strong"
+              strokeWidth="1.5"
+              strokeDasharray="2 8"
+              strokeLinecap="round"
+              fill="none"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
 
-          <div className="relative grid gap-12 lg:grid-cols-3 lg:gap-8">
+          <div className="relative grid gap-14 lg:grid-cols-3 lg:gap-8">
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
+                transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 className="relative flex flex-col items-center text-center"
               >
-                <div className="relative z-10 grid size-16 place-items-center rounded-2xl border border-white/10 bg-[#0d0d15] shadow-lg shadow-violet-500/10">
-                  <div className="absolute inset-0 -z-10 rounded-2xl bg-violet-600/20 blur-xl" />
-                  <step.icon className="size-7 text-cyan-400" />
+                <div className="relative z-10 grid size-16 place-items-center rounded-[45%_55%_50%_50%/55%_45%_55%_45%] border border-border bg-background shadow-soft">
+                  <step.icon className="size-6 text-sage-strong" strokeWidth={1.75} />
                 </div>
 
-                <span className="mt-6 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-6xl font-black leading-none text-transparent">
+                <span className="mt-6 font-heading text-5xl leading-none font-light text-clay italic">
                   {step.number}
                 </span>
 
-                <h3 className="mt-4 text-xl font-semibold text-white">{step.title}</h3>
-                <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
+                <h3 className="mt-4 font-heading text-2xl font-medium text-foreground">{step.title}</h3>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
                   {step.description}
                 </p>
               </motion.div>
