@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
-import { MessageSquare, BarChart3, PenLine, LayoutDashboard } from "lucide-react"
+import { MessageCircle, SmilePlus, NotebookPen, LayoutDashboard } from "lucide-react"
 
 export function MobileNav() {
   const { isSignedIn } = useUser()
@@ -12,26 +12,30 @@ export function MobileNav() {
   if (!isSignedIn) return null
 
   const items = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, color: "text-cyan-400" },
-    { href: "/chat", label: "Chat", icon: MessageSquare, color: "text-violet-400" },
-    { href: "/mood", label: "Mood", icon: BarChart3, color: "text-fuchsia-400" },
-    { href: "/journal", label: "Journal", icon: PenLine, color: "text-violet-400" },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/chat", label: "Chat", icon: MessageCircle },
+    { href: "/mood", label: "Mood", icon: SmilePlus },
+    { href: "/journal", label: "Journal", icon: NotebookPen },
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center justify-around border-t border-white/10 bg-[#0d0d0d]/95 backdrop-blur-xl px-2 py-2">
-      {items.map(({ href, label, icon: Icon, color }) => {
+    <nav
+      aria-label="App"
+      className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-around border-t border-border bg-background/90 px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] backdrop-blur-md sm:hidden"
+    >
+      {items.map(({ href, label, icon: Icon }) => {
         const isActive = pathname === href
         return (
           <Link
             key={href}
             href={href}
-            className={`flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition-all duration-200 ${
-              isActive ? "bg-white/[0.06] " + color : "text-white/50 hover:text-white"
+            aria-current={isActive ? "page" : undefined}
+            className={`flex min-w-16 flex-col items-center gap-1 rounded-2xl px-3 py-1.5 transition-colors duration-200 ${
+              isActive ? "bg-sage-soft text-sage-strong" : "text-faint hover:text-foreground"
             }`}
           >
-            <Icon className="size-5" />
-            <span className="text-[10px] font-medium">{label}</span>
+            <Icon className="size-5" strokeWidth={1.75} />
+            <span className="text-[11px] font-medium">{label}</span>
           </Link>
         )
       })}
