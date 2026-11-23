@@ -52,10 +52,10 @@ export function Testimonials() {
             Testimonials
           </span>
           <h2 className="mt-4 bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-5xl">
-            Real People, Real Healing
+            What people have told us
           </h2>
           <p className="mt-4 text-base leading-relaxed text-white/60">
-            Real humans, real healing — from every corner of the planet.
+            A few notes from people who use Solace.
           </p>
         </motion.div>
 
