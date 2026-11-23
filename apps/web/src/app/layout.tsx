@@ -3,8 +3,8 @@ import { ClerkProvider } from '@clerk/nextjs'
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Solace — Mental Wellness Companion",
-  description: "AI-powered mental wellness for everyone",
+  title: "Solace: Mental Wellness Companion",
+  description: "Talk things through with an AI companion, keep a private journal and track your mood. Free to use.",
 };
 
 export default function RootLayout({
