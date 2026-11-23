@@ -2,47 +2,49 @@
 
 import { motion } from "framer-motion"
 import {
-  Brain,
-  BarChart2,
-  BookOpen,
-  Shield,
-  Zap,
-  Globe,
+  MessageCircleHeart,
+  SmilePlus,
+  NotebookPen,
+  LockKeyhole,
+  LifeBuoy,
+  MonitorSmartphone,
   type LucideIcon,
 } from "lucide-react"
+import { SectionLabel } from "./SectionLabel"
 
-const features: { icon: LucideIcon; title: string; description: string }[] = [
+const features: { icon: LucideIcon; title: string; description: string; tone?: "clay" }[] = [
   {
-    icon: Brain,
+    icon: MessageCircleHeart,
     title: "Chat any time",
     description:
       "Talk to Solace day or night. It listens, replies without judgment and can suggest ways to cope. It won't diagnose you or replace a therapist.",
   },
   {
-    icon: BarChart2,
+    icon: SmilePlus,
     title: "Mood tracking",
     description:
       "Pick one of five moods, add a note if you like, and see your last seven days on a simple chart.",
   },
   {
-    icon: BookOpen,
+    icon: NotebookPen,
     title: "Private journal",
     description:
       "Write as much or as little as you want. When you save, Solace notes the overall tone and replies with a short reflection and a question to think about.",
   },
   {
-    icon: Shield,
+    icon: LockKeyhole,
     title: "Private to you",
     description: "Your chats, journal entries and mood history are tied to your account. Nobody else can see them.",
   },
   {
-    icon: Zap,
+    icon: LifeBuoy,
     title: "Help when it's serious",
+    tone: "clay",
     description:
       "If you mention suicide or self-harm in a chat, Solace shows crisis helplines straight away: 988 in the US and befrienders.org everywhere else.",
   },
   {
-    icon: Globe,
+    icon: MonitorSmartphone,
     title: "Use it anywhere",
     description:
       "Solace runs in your browser on your phone or laptop. There's nothing to install.",
@@ -51,55 +53,49 @@ const features: { icon: LucideIcon; title: string; description: string }[] = [
 
 export function Features() {
   return (
-    <section id="features" className="relative scroll-mt-24 px-4 py-28">
-      <div className="pointer-events-none absolute top-0 left-1/2 h-96 w-[36rem] -translate-x-1/2 rounded-full bg-violet-600/10 blur-[120px]" />
-
+    <section id="features" className="relative scroll-mt-24 px-5 py-24 sm:py-28">
       <div className="relative mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
-            Features
-          </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          <SectionLabel>Features</SectionLabel>
+          <h2 className="mt-4 font-heading text-4xl font-normal tracking-tight text-foreground sm:text-5xl">
             What you can do in Solace
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-white/60">
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
             Chat, journal, log your mood or take a few slow breaths. It&apos;s all
             in one place.
           </p>
         </motion.div>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-violet-500/40 hover:shadow-2xl hover:shadow-violet-500/20"
+              transition={{ duration: 0.7, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className="surface group relative rounded-3xl p-7 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-0.5 hover:shadow-lift"
             >
-              <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="absolute inset-0 bg-[radial-gradient(300px_at_50%_0%,rgba(139,92,246,0.15),transparent_70%)]" />
-              </div>
-
-              <motion.div
-                whileHover={{ scale: 1.15 }}
-                transition={{ duration: 0.2 }}
-                className="relative inline-grid size-12 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-lg shadow-violet-500/25"
+              <span
+                className={`inline-grid size-12 place-items-center rounded-[45%_55%_50%_50%/55%_45%_55%_45%] transition-[border-radius] duration-700 group-hover:rounded-[55%_45%_45%_55%/45%_55%_45%_55%] ${
+                  feature.tone === "clay"
+                    ? "bg-clay-soft text-clay-strong"
+                    : "bg-sage-soft text-sage-strong"
+                }`}
               >
-                <feature.icon className="size-6 text-white" />
-              </motion.div>
+                <feature.icon className="size-5" strokeWidth={1.75} />
+              </span>
 
-              <h3 className="relative mt-5 text-lg font-semibold text-white">
+              <h3 className="mt-5 font-heading text-xl font-medium text-foreground">
                 {feature.title}
               </h3>
-              <p className="relative mt-2.5 text-sm leading-relaxed text-white/60">
+              <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
                 {feature.description}
               </p>
             </motion.div>
