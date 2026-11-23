@@ -2,7 +2,24 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { PenLine, Pin, Link2, Trash2, BarChart3, MessageSquare, Plus } from "lucide-react"
+import {
+  PenLine,
+  Pin,
+  Link2,
+  Trash2,
+  MessageSquare,
+  Plus,
+  X,
+  MoreHorizontal,
+  PanelLeft,
+  ArrowLeft,
+  SmilePlus,
+  NotebookPen,
+  LifeBuoy,
+  SendHorizontal,
+} from "lucide-react"
+import { LogoMark } from "@/components/brand/Logo"
+import { GardenBackdrop, GardenNook } from "@/components/brand/Garden"
 
 const ERROR_MESSAGE = "Something went wrong. Please try again."
 
@@ -31,15 +48,6 @@ type Session = {
 
 const GROQ_API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/api/v1/chat/`
 
-const PARTICLES = [
-  { top: "14%", left: "8%", size: 5, delay: 0, color: "rgba(34,211,238,0.7)" },
-  { top: "28%", left: "88%", size: 4, delay: 0.6, color: "rgba(217,70,239,0.6)" },
-  { top: "58%", left: "5%", size: 6, delay: 1.2, color: "rgba(139,92,246,0.7)" },
-  { top: "72%", left: "92%", size: 3, delay: 0.3, color: "rgba(34,211,238,0.6)" },
-  { top: "44%", left: "95%", size: 4, delay: 0.9, color: "rgba(139,92,246,0.6)" },
-  { top: "84%", left: "38%", size: 3, delay: 1.5, color: "rgba(34,211,238,0.6)" },
-  { top: "36%", left: "3%", size: 3, delay: 2.1, color: "rgba(217,70,239,0.5)" },
-]
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -338,36 +346,33 @@ export default function ChatPage() {
   const canSend = !isStreaming && input.trim().length > 0
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#0d0d0d] text-white">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
       {/* Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-foreground/20 backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-full w-72 flex-col border-r border-white/10 bg-[#0d0d0d]/95 backdrop-blur-xl transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 z-50 flex h-full w-72 flex-col border-r border-border bg-card shadow-float transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+        <div className="flex items-center justify-between border-b border-border px-4 py-4">
           <div className="flex items-center gap-2">
-            <span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500">
-              <svg viewBox="0 0 24 24" className="size-4 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-              </svg>
-            </span>
-            <span className="text-sm font-semibold text-white">Chat History</span>
+            <LogoMark className="size-7" />
+            <span className="font-heading text-base font-medium text-foreground">Chat History</span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-xl leading-none text-white/40 transition-colors hover:text-white"
+            aria-label="Close chat history"
+            className="grid size-8 place-items-center rounded-full text-faint transition-colors hover:bg-muted hover:text-foreground"
           >
-            ×
+            <X className="size-4" />
           </button>
         </div>
 
@@ -375,23 +380,23 @@ export default function ChatPage() {
         <div className="px-3 py-3">
           <button
             onClick={newChat}
-            className="flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-left text-sm text-white/70 transition-all duration-200 hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-white"
+            className="flex w-full items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 text-left text-sm text-foreground transition-colors duration-200 hover:border-sage hover:bg-sage-soft"
           >
-            <PenLine className="size-4 text-violet-400" /> New Conversation
+            <PenLine className="size-4 text-sage-strong" /> New Conversation
           </button>
         </div>
 
         {/* Sessions List */}
         <div className="flex-1 overflow-y-auto px-3 pb-4">
           {sessions.length === 0 ? (
-            <div className="mt-8 text-center text-xs text-white/30">
+            <div className="mt-8 text-center text-xs text-faint">
               No conversations yet
             </div>
           ) : (
             <div className="flex flex-col gap-1">
               {/* Pinned sessions first */}
               {sessions.some((s) => s.pinned) && (
-                <p className="mb-1 flex items-center gap-1 px-1 text-[10px] font-medium tracking-widest text-violet-400/60 uppercase">
+                <p className="mb-1 flex items-center gap-1 px-1 text-[11px] font-semibold tracking-widest text-sage-strong uppercase">
                   <Pin className="size-3" /> Pinned
                 </p>
               )}
@@ -404,9 +409,9 @@ export default function ChatPage() {
                 .map((s) => (
                   <div
                     key={s.id}
-                    className={`group relative w-full rounded-xl transition-all duration-200 hover:bg-white/[0.06] ${
+                    className={`group relative w-full rounded-2xl transition-colors duration-200 hover:bg-muted ${
                       sessionId === s.id
-                        ? "border border-violet-500/40 bg-violet-500/10"
+                        ? "border border-sage/50 bg-sage-soft"
                         : "border border-transparent"
                     }`}
                   >
@@ -414,17 +419,17 @@ export default function ChatPage() {
                     <button
                       onClick={() => loadSession(s.id)}
                       disabled={loadingSession}
-                      className="w-full px-3 py-2.5 text-left disabled:opacity-50"
+                      className="w-full rounded-2xl px-3 py-2.5 pr-9 text-left disabled:opacity-50"
                     >
                       <div className="flex items-center gap-1.5">
                         {s.pinned && (
-                          <Pin className="size-3 text-violet-400" />
+                          <Pin className="size-3 text-sage-strong" />
                         )}
-                        <p className="flex-1 truncate text-sm text-white/80">
+                        <p className="flex-1 truncate text-sm text-foreground">
                           {s.title && s.title !== "New Conversation" ? s.title : "New Conversation"}
                         </p>
                       </div>
-                      <p className="mt-0.5 text-[10px] text-white/30">
+                      <p className="mt-0.5 text-[11px] text-faint">
                         {new Date(s.updatedAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
@@ -434,44 +439,41 @@ export default function ChatPage() {
                       </p>
                     </button>
 
-                    {/* 3-dot menu button — visible on hover or when menu open */}
+                    {/* 3-dot menu button, visible on hover or when the menu is open */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
                         setOpenMenuId(openMenuId === s.id ? null : s.id)
                       }}
-                      className={`absolute top-2.5 right-2 rounded-lg p-1 text-white/40 transition-all hover:bg-white/10 hover:text-white ${
-                        openMenuId === s.id ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                      aria-label="Conversation options"
+                      className={`absolute top-2.5 right-2 rounded-lg p-1 text-faint transition-opacity hover:bg-card hover:text-foreground focus-visible:opacity-100 ${
+                        openMenuId === s.id ? "opacity-100" : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                       }`}
                     >
-                      <svg viewBox="0 0 24 24" className="size-3.5" fill="currentColor">
-                        <circle cx="5" cy="12" r="1.5" />
-                        <circle cx="12" cy="12" r="1.5" />
-                        <circle cx="19" cy="12" r="1.5" />
-                      </svg>
+                      <MoreHorizontal className="size-4" />
                     </button>
 
                     {/* Dropdown menu */}
                     {openMenuId === s.id && (
-                      <div className="absolute top-8 right-2 z-50 min-w-[140px] overflow-hidden rounded-xl border border-white/10 bg-[#1a1a2e] shadow-2xl shadow-black/60 backdrop-blur-xl">
+                      <div className="absolute top-9 right-2 z-50 min-w-[150px] overflow-hidden rounded-2xl border border-border bg-popover py-1 shadow-lift">
                         <button
                           onClick={() => pinSession(s.id, s.pinned)}
-                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
+                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-foreground transition-colors hover:bg-muted"
                         >
                           <Pin className="size-3.5" />
                           {s.pinned ? "Unpin" : "Pin"}
                         </button>
                         <button
                           onClick={() => shareSession(s.id)}
-                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
+                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-foreground transition-colors hover:bg-muted"
                         >
                           <Link2 className="size-3.5" />
                           Share
                         </button>
-                        <div className="border-t border-white/10" />
+                        <div className="my-1 border-t border-border" />
                         <button
                           onClick={() => deleteSession(s.id)}
-                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-rose-400 transition-colors hover:bg-rose-500/10"
+                          className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-destructive transition-colors hover:bg-destructive-soft"
                         >
                           <Trash2 className="size-3.5" />
                           Delete
@@ -486,104 +488,42 @@ export default function ChatPage() {
       </aside>
 
       <style>{`
-        @keyframes particleFloat {
-          0%, 100% { transform: translateY(-8px); opacity: 0.25; }
-          50% { transform: translateY(8px); opacity: 1; }
-        }
-        @keyframes blobDrift {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(40px, 30px) scale(1.08); }
-          66% { transform: translate(-30px, -20px) scale(0.95); }
-        }
-        @keyframes blobPulse {
-          0%, 100% { opacity: 0.35; }
-          50% { opacity: 0.9; }
-        }
         @keyframes msgIn {
-          from { opacity: 0; transform: translateY(14px); }
+          from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .solace-msg { animation: msgIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
-        .solace-particle {
-          animation: particleFloat 5s ease-in-out infinite;
-        }
+        .solace-msg { animation: msgIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
       `}</style>
 
-      <div className="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+      <GardenBackdrop />
 
-      <div
-        className="pointer-events-none fixed -top-64 -left-64 z-0 size-[600px] rounded-full bg-violet-600/25 blur-[120px]"
-        style={{ animation: "blobDrift 16s ease-in-out infinite" }}
-      />
-      <div
-        className="pointer-events-none fixed -right-40 -bottom-40 z-0 size-[500px] rounded-full bg-cyan-500/20 blur-[120px]"
-        style={{ animation: "blobDrift 20s ease-in-out infinite reverse" }}
-      />
-      <div
-        className="pointer-events-none fixed top-1/4 right-1/3 z-0 size-72 rounded-full bg-fuchsia-600/20 blur-[100px]"
-        style={{ animation: "blobPulse 8s ease-in-out infinite" }}
-      />
-
-      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
-        {PARTICLES.map((p, i) => (
-          <span
-            key={i}
-            className="solace-particle absolute rounded-full blur-[1px]"
-            style={{
-              top: p.top,
-              left: p.left,
-              width: p.size,
-              height: p.size,
-              backgroundColor: p.color,
-              animationDelay: `${p.delay}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/[0.04] backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-4 py-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="shrink-0 rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
-                aria-label="Chat history"
-              >
-                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="15" y2="18" />
-                </svg>
-              </button>
-              <Link
-                href="/"
-                aria-label="Back to home"
-                className="shrink-0 rounded-full border border-white/15 bg-white/[0.04] p-2 text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
-              >
-                <span aria-hidden>←</span>
-              </Link>
-              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 shadow-lg shadow-violet-500/30">
-              <svg
-                viewBox="0 0 24 24"
-                className="size-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-              </svg>
-            </span>
+      <header className="fixed inset-x-0 top-0 z-30 border-b border-border/80 bg-background/85 backdrop-blur-md">
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-3 px-4 py-3">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="grid size-9 shrink-0 place-items-center rounded-full border border-border bg-card text-muted-foreground transition-colors duration-200 hover:border-line-strong hover:text-foreground"
+              aria-label="Chat history"
+            >
+              <PanelLeft className="size-4" />
+            </button>
+            <Link
+              href="/"
+              aria-label="Back to home"
+              className="grid size-9 shrink-0 place-items-center rounded-full border border-border bg-card text-muted-foreground transition-colors duration-200 hover:border-line-strong hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" />
+            </Link>
+            <LogoMark className="ml-1 size-9" />
             <div className="min-w-0 leading-tight">
               <div className="flex items-center gap-2">
-                <p className="truncate text-base font-semibold text-white">Solace</p>
-                <span className="shrink-0 text-[10px] font-medium text-emerald-400">
-                  <span className="size-1.5 animate-pulse rounded-full bg-emerald-400" />
+                <p className="truncate font-heading text-lg font-medium text-foreground">Solace</p>
+                <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-medium text-sage-strong">
+                  <span className="size-1.5 rounded-full bg-sage animate-breathe" />
                   online
                 </span>
               </div>
-              <p className="truncate text-xs font-semibold tracking-[0.2em] text-cyan-400 uppercase">
+              <p className="truncate text-xs text-faint">
                 AI Mental Health Support
               </p>
             </div>
@@ -591,20 +531,20 @@ export default function ChatPage() {
           <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/mood"
-              className="hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-200 hover:border-line-strong hover:text-foreground sm:inline-flex"
             >
-              <BarChart3 className="size-3.5 text-fuchsia-400" /> Mood
+              <SmilePlus className="size-3.5 text-clay-strong" /> Mood
             </Link>
             <Link
               href="/journal"
-              className="hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs text-white/60 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-200 hover:border-line-strong hover:text-foreground sm:inline-flex"
             >
-              <PenLine className="size-3.5 text-violet-400" /> Journal
+              <NotebookPen className="size-3.5 text-sage-strong" /> Journal
             </Link>
             <button
               onClick={newChat}
               disabled={isStreaming}
-              className="rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm text-white/80 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
             >
               New Chat
             </button>
@@ -614,75 +554,64 @@ export default function ChatPage() {
 
       <div
         ref={scrollRef}
-        className="relative z-10 flex-1 overflow-y-auto px-4 pt-24 pb-32 sm:pb-40"
+        className="relative z-10 flex-1 overflow-y-auto px-4 pt-24 pb-48 sm:pb-40"
       >
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
           {showCrisisBanner && (
-            <div className="mx-auto mb-4 w-full max-w-3xl rounded-2xl border border-rose-500/40 bg-rose-500/10 px-5 py-4 backdrop-blur-md">
+            <div role="alert" className="mx-auto mb-2 w-full max-w-3xl rounded-3xl border border-clay/40 bg-clay-soft px-5 py-4 shadow-soft">
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-rose-400">
-                    🆘 You&apos;re not alone, and help is available right now
-                  </p>
-                  <p className="mt-1 text-xs text-white/60">
-                    If you&apos;re in crisis, please contact one of these helplines:
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-3">
-                    <a
-                      href="tel:988"
-                      className="text-xs font-medium text-cyan-400 hover:underline"
-                    >
-                      📞 988 Suicide & Crisis Lifeline (US)
-                    </a>
-                    <a
-                      href="https://www.befrienders.org"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-xs font-medium text-cyan-400 hover:underline"
-                    >
-                      🌍 International: befrienders.org
-                    </a>
+                <div className="flex gap-3">
+                  <LifeBuoy className="mt-0.5 size-5 shrink-0 text-clay-strong" />
+                  <div>
+                    <p className="text-sm font-semibold text-clay-strong">
+                      🆘 You&apos;re not alone, and help is available right now
+                    </p>
+                    <p className="mt-1 text-xs text-foreground/80">
+                      If you&apos;re in crisis, please contact one of these helplines:
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <a
+                        href="tel:988"
+                        className="rounded-full bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-soft transition-colors hover:bg-background"
+                      >
+                        📞 988 Suicide & Crisis Lifeline (US)
+                      </a>
+                      <a
+                        href="https://www.befrienders.org"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-full bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-soft transition-colors hover:bg-background"
+                      >
+                        🌍 International: befrienders.org
+                      </a>
+                    </div>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowCrisisBanner(false)}
-                  className="shrink-0 text-lg leading-none text-white/40 hover:text-white"
+                  aria-label="Dismiss"
+                  className="grid size-7 shrink-0 place-items-center rounded-full text-clay-strong/70 transition-colors hover:bg-card hover:text-clay-strong"
                 >
-                  ×
+                  <X className="size-4" />
                 </button>
               </div>
             </div>
           )}
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center pt-20 text-center">
-              <div className="relative">
-                <div className="absolute inset-0 -z-10 size-16 rounded-2xl bg-violet-500/30 blur-2xl" />
-                <span className="grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-500 shadow-xl shadow-violet-500/30">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="size-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-                  </svg>
-                </span>
-              </div>
-              <h1 className="mt-6 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
+            <div className="animate-rise flex flex-col items-center justify-center pt-12 text-center sm:pt-16">
+              <GardenNook />
+              <h1 className="mt-6 font-heading text-3xl font-normal text-foreground sm:text-4xl">
                 How are you feeling today?
               </h1>
-              <p className="mt-3 text-sm text-white/60">
+              <p className="mt-3 max-w-sm text-sm text-muted-foreground">
                 I&apos;m here to listen. Start wherever you like, or pick one of these:
               </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
                 {SUGGESTIONS.map((chip) => (
                   <button
                     key={chip}
                     onClick={() => handleChip(chip)}
-                    className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:text-white"
+                    className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground shadow-soft transition-[transform,border-color,background-color] duration-300 hover:-translate-y-0.5 hover:border-sage hover:bg-sage-soft"
                   >
                     {chip}
                   </button>
@@ -693,23 +622,23 @@ export default function ChatPage() {
             messages.map((m, i) =>
               m.role === "user" ? (
                 <div key={i} className="solace-msg flex justify-end">
-                  <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm text-white shadow-lg shadow-violet-500/20 sm:max-w-[75%]">
+                  <div className="max-w-[85%] rounded-3xl rounded-br-md bg-primary px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-primary-foreground sm:max-w-[75%]">
                     {m.content}
                   </div>
                 </div>
               ) : (
                 <div key={i} className="solace-msg flex items-start gap-3">
-                  <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-sm font-bold text-white shadow-lg shadow-violet-500/30">
-                    S
-                  </span>
+                  <LogoMark className="mt-1 size-8" />
                   <div
-                    className={`max-w-[85%] rounded-2xl rounded-tl-sm border border-white/10 bg-white/[0.04] px-4 py-3 text-sm leading-relaxed backdrop-blur-xl sm:max-w-[75%] ${
-                      m.content === ERROR_MESSAGE ? "text-rose-400" : "text-white/90"
+                    className={`max-w-[85%] rounded-3xl rounded-tl-md border px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-soft sm:max-w-[75%] ${
+                      m.content === ERROR_MESSAGE
+                        ? "border-destructive/30 bg-destructive-soft text-destructive"
+                        : "border-border bg-card text-foreground"
                     }`}
                   >
                     {m.content}
                     {streamingNow && i === messages.length - 1 && (
-                      <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse bg-cyan-400 align-middle" />
+                      <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse bg-sage align-middle" />
                     )}
                   </div>
                 </div>
@@ -718,14 +647,12 @@ export default function ChatPage() {
           )}
 
           {showTyping && (
-            <div className="solace-msg flex items-start gap-3">
-              <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-sm font-bold text-white shadow-lg shadow-violet-500/30">
-                S
-              </span>
-              <div className="flex items-center gap-1.5 rounded-2xl rounded-tl-sm border border-white/10 bg-white/[0.04] px-4 py-3.5 backdrop-blur-xl">
-                <span className="size-2 animate-bounce rounded-full bg-violet-500 [animation-delay:0ms]" />
-                <span className="size-2 animate-bounce rounded-full bg-fuchsia-500 [animation-delay:150ms]" />
-                <span className="size-2 animate-bounce rounded-full bg-cyan-500 [animation-delay:300ms]" />
+            <div className="solace-msg flex items-start gap-3" aria-label="Solace is typing">
+              <LogoMark className="mt-1 size-8" />
+              <div className="flex items-center gap-1.5 rounded-3xl rounded-tl-md border border-border bg-card px-4 py-4 shadow-soft">
+                <span className="animate-dot size-2 rounded-full bg-sage [animation-delay:0ms]" />
+                <span className="animate-dot size-2 rounded-full bg-sage [animation-delay:180ms]" />
+                <span className="animate-dot size-2 rounded-full bg-sage [animation-delay:360ms]" />
               </div>
             </div>
           )}
@@ -733,36 +660,36 @@ export default function ChatPage() {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0d0d0d]/95 px-4 py-3 backdrop-blur-xl sm:hidden">
-        <div className="flex flex-col items-center gap-1 text-violet-400">
-          <MessageSquare className="size-5" />
-          <span className="text-[10px]">Chat</span>
+      <nav className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-around border-t border-border bg-background/90 px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] backdrop-blur-md sm:hidden">
+        <div className="flex min-w-16 flex-col items-center gap-1 rounded-2xl bg-sage-soft px-3 py-1.5 text-sage-strong">
+          <MessageSquare className="size-5" strokeWidth={1.75} />
+          <span className="text-[11px] font-medium">Chat</span>
         </div>
         <Link
           href="/mood"
-          className="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-fuchsia-400"
+          className="flex min-w-16 flex-col items-center gap-1 rounded-2xl px-3 py-1.5 text-faint transition-colors hover:text-foreground"
         >
-          <BarChart3 className="size-5" />
-          <span className="text-[10px]">Mood</span>
+          <SmilePlus className="size-5" strokeWidth={1.75} />
+          <span className="text-[11px] font-medium">Mood</span>
         </Link>
         <Link
           href="/journal"
-          className="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-violet-400"
+          className="flex min-w-16 flex-col items-center gap-1 rounded-2xl px-3 py-1.5 text-faint transition-colors hover:text-foreground"
         >
-          <PenLine className="size-5" />
-          <span className="text-[10px]">Journal</span>
+          <NotebookPen className="size-5" strokeWidth={1.75} />
+          <span className="text-[11px] font-medium">Journal</span>
         </Link>
         <button
           onClick={newChat}
-          className="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-cyan-400"
+          className="flex min-w-16 flex-col items-center gap-1 rounded-2xl px-3 py-1.5 text-faint transition-colors hover:text-foreground"
         >
-          <Plus className="size-5" />
-          <span className="text-[10px]">New</span>
+          <Plus className="size-5" strokeWidth={1.75} />
+          <span className="text-[11px] font-medium">New</span>
         </button>
       </nav>
 
-      <footer className="fixed inset-x-0 bottom-16 z-50 border-t border-white/10 bg-white/[0.04] backdrop-blur-xl sm:bottom-0">
-        <div className="mx-auto flex w-full max-w-3xl items-end gap-3 px-4 pt-4 pb-[calc(0.5rem+env(safe-area-inset-bottom))] sm:pb-4">
+      <footer className="fixed inset-x-0 bottom-16 z-30 border-t border-border bg-background/90 backdrop-blur-md sm:bottom-0">
+        <div className="mx-auto flex w-full max-w-3xl items-end gap-2.5 px-4 pt-3 pb-3 sm:pt-4 sm:pb-4">
           <textarea
             ref={textareaRef}
             value={input}
@@ -774,26 +701,16 @@ export default function ChatPage() {
             rows={1}
             placeholder="Share what's on your mind..."
             disabled={isStreaming}
-            className="max-h-28 flex-1 resize-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/90 placeholder:text-white/40 backdrop-blur-xl outline-none transition-all duration-300 focus:border-white/20 focus:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Message"
+            className="max-h-28 flex-1 resize-none rounded-3xl border border-input bg-card px-4 py-3 text-sm text-foreground placeholder:text-faint shadow-soft outline-none transition-colors duration-300 focus:border-ring disabled:cursor-not-allowed disabled:opacity-50"
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={!canSend}
             aria-label="Send message"
-            className="shrink-0 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-40"
+            className="grid size-12 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-soft transition-colors duration-200 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="size-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m22 2-7 20-4-9-9-4Z" />
-              <path d="M22 2 11 13" />
-            </svg>
+            <SendHorizontal className="size-4" />
           </button>
         </div>
       </footer>
