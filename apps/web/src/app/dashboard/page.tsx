@@ -209,7 +209,7 @@ export default function DashboardPage() {
       setAffirmation(data.reflection)
     } catch {
       setAffirmation(
-        "You are stronger than you think. Every day is a new beginning. 💜",
+        "Some days are harder than others. Getting through this one still counts. 💜",
       )
     } finally {
       setAffirmationLoading(false)
@@ -699,7 +699,7 @@ export default function DashboardPage() {
                   4-7-8 Breathing
                 </h2>
                 <p className="mt-1 text-xs text-white/40">
-                  Reduces anxiety in minutes
+                  In for 4, hold for 7, out for 8
                 </p>
 
                 <div className="relative mt-10 flex h-56 w-56 items-center justify-center">
@@ -726,7 +726,7 @@ export default function DashboardPage() {
 
                 <p className="mt-8 text-xs text-white/50">
                   {phase === "idle"
-                    ? "Take a moment to center yourself."
+                    ? "Four slow rounds. Press start when you're ready."
                     : `Cycle ${Math.min(cycle + 1, 4)} of 4`}
                 </p>
 
