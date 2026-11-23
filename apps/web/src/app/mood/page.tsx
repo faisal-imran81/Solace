@@ -238,7 +238,7 @@ export default function MoodPage() {
             </div>
           ) : entries.length === 0 ? (
             <p className="py-12 text-center text-sm text-white/40">
-              No mood data yet — start by logging today&apos;s mood!
+              No moods logged yet. Pick one above to get started.
             </p>
           ) : (
             <div className="mt-6 flex h-40 items-end gap-2 sm:gap-3">
