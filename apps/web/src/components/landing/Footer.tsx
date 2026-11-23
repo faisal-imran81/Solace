@@ -1,6 +1,6 @@
 "use client"
 
-import { Brain } from "lucide-react"
+import { Logo } from "@/components/brand/Logo"
 
 const footerLinks = [
   { label: "Privacy", href: "#" },
@@ -11,21 +11,16 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-[#0a0a0f] px-4 py-12">
+    <footer className="border-t border-border bg-background px-5 py-12">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 sm:flex-row">
-        <span className="flex items-center gap-2 text-base font-semibold text-white/40 transition-colors duration-200 hover:text-white/80">
-          <span className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500">
-            <Brain className="size-4 text-white" />
-          </span>
-          Solace
-        </span>
+        <Logo markClassName="size-8" />
 
-        <div className="flex items-center gap-8 text-sm text-white/40">
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
           {footerLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="transition-colors duration-200 hover:text-white/80"
+              className="rounded transition-colors duration-200 hover:text-foreground"
             >
               {link.label}
             </a>
@@ -33,7 +28,7 @@ export function Footer() {
         </div>
       </div>
 
-      <p className="mt-10 text-center text-xs text-white/40">
+      <p className="mt-10 text-center text-xs text-faint">
         © 2025 Solace. Built with ❤️ to make mental health support easier to reach.
       </p>
     </footer>
