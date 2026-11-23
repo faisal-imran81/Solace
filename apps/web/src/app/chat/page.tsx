@@ -385,7 +385,7 @@ export default function ChatPage() {
         <div className="flex-1 overflow-y-auto px-3 pb-4">
           {sessions.length === 0 ? (
             <div className="mt-8 text-center text-xs text-white/30">
-              No previous conversations yet
+              No conversations yet
             </div>
           ) : (
             <div className="flex flex-col gap-1">
@@ -622,10 +622,10 @@ export default function ChatPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm font-semibold text-rose-400">
-                    🆘 You&apos;re not alone — immediate help is available
+                    🆘 You&apos;re not alone, and help is available right now
                   </p>
                   <p className="mt-1 text-xs text-white/60">
-                    If you&apos;re in crisis, please reach out to a helpline right now:
+                    If you&apos;re in crisis, please contact one of these helplines:
                   </p>
                   <div className="mt-2 flex flex-wrap gap-3">
                     <a
@@ -675,7 +675,7 @@ export default function ChatPage() {
                 How are you feeling today?
               </h1>
               <p className="mt-3 text-sm text-white/60">
-                I&apos;m here to listen, support, and guide you.
+                I&apos;m here to listen. Start wherever you like, or pick one of these:
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 {SUGGESTIONS.map((chip) => (
