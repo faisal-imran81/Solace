@@ -32,11 +32,11 @@ export function CTA() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl">
-            Your healing journey starts today
+            Start with one conversation
           </h2>
 
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
-            Join thousands finding peace with Solace. Free forever, no credit card
+            Sign up for free and say whatever&apos;s on your mind. No credit card
             needed.
           </p>
 
@@ -45,14 +45,14 @@ export function CTA() {
               href="/sign-up"
               className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-violet-500/30 transition-all duration-200 hover:scale-[1.03] hover:shadow-violet-500/50"
             >
-              Start for Free
+              Start for free
               <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <a
               href="#features"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-8 py-4 text-sm font-semibold text-white/80 backdrop-blur-md transition-colors duration-200 hover:border-white/30 hover:text-white"
             >
-              Learn More
+              See the features
             </a>
           </div>
         </motion.div>
