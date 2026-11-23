@@ -10,7 +10,7 @@ import { MobileNav } from "@/components/landing/MobileNav"
 
 export default function Home() {
   return (
-    <div className="dark scroll-smooth overflow-x-hidden bg-[#0a0a0f] text-white antialiased pb-16 sm:pb-0">
+    <div className="scroll-smooth overflow-x-hidden bg-background text-foreground antialiased pb-16 sm:pb-0">
       <Navbar />
       <main>
         <Hero />
