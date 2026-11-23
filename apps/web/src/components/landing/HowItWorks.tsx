@@ -12,23 +12,23 @@ const steps: {
   {
     icon: UserPlus,
     number: "01",
-    title: "Create Account",
+    title: "Create an account",
     description:
-      "Sign up anonymously in seconds. No personal information required.",
+      "Sign up for free. It takes about a minute.",
   },
   {
     icon: MessageCircle,
     number: "02",
     title: "Talk to Solace",
     description:
-      "Start a conversation, track your mood, or write in your journal.",
+      "Start a chat, log your mood or write a journal entry. Begin with whatever you need today.",
   },
   {
     icon: TrendingUp,
     number: "03",
-    title: "Grow & Heal",
+    title: "See your week",
     description:
-      "Get personalized insights and watch your wellness improve over time.",
+      "Your dashboard brings it together: a wellness score, your mood over the last seven days, and your recent chats and entries.",
   },
 ]
 
@@ -49,10 +49,10 @@ export function HowItWorks() {
             How it works
           </span>
           <h2 className="mt-4 bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-5xl">
-            How Solace Works
+            Getting started is quick
           </h2>
           <p className="mt-4 text-base leading-relaxed text-white/60">
-            Three simple steps. Your entire journey — private and pressure-free.
+            Sign up, pick a place to start, and come back whenever you need to.
           </p>
         </motion.div>
 
