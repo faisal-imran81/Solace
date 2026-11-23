@@ -374,10 +374,10 @@ export default function JournalPage() {
                   </span>
                 </div>
                 <h2 className="mt-6 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
-                  Start your healing journey
+                  Your journal is empty
                 </h2>
                 <p className="mt-3 text-sm text-white/60">
-                  Write freely. This is your safe space.
+                  Write about your day, a worry, anything at all. Only you can read it.
                 </p>
                 <button
                   onClick={() => openEditor()}
@@ -436,7 +436,7 @@ export default function JournalPage() {
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Write freely. This is your safe space..."
+              placeholder="What's on your mind today?"
               className="min-h-[40vh] w-full flex-1 resize-none border-0 bg-transparent text-base leading-relaxed text-white/80 placeholder:text-white/30 focus:outline-none"
             />
 
