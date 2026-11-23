@@ -14,38 +14,38 @@ import {
 const features: { icon: LucideIcon; title: string; description: string }[] = [
   {
     icon: Brain,
-    title: "AI Therapy Sessions",
+    title: "Chat any time",
     description:
-      "Talk to Solace anytime. Empathetic, judgment-free conversations powered by advanced AI.",
+      "Talk to Solace day or night. It listens, replies without judgment and can suggest ways to cope. It won't diagnose you or replace a therapist.",
   },
   {
     icon: BarChart2,
-    title: "Mood Analytics",
+    title: "Mood tracking",
     description:
-      "Track your emotional patterns with beautiful visualizations and weekly insights.",
+      "Pick one of five moods, add a note if you like, and see your last seven days on a simple chart.",
   },
   {
     icon: BookOpen,
-    title: "Private Journal",
+    title: "Private journal",
     description:
-      "Write freely. AI analyzes sentiment and offers gentle reflections.",
+      "Write as much or as little as you want. When you save, Solace notes the overall tone and replies with a short reflection and a question to think about.",
   },
   {
     icon: Shield,
-    title: "100% Anonymous",
-    description: "No names, no judgments. Your privacy is sacred and fully protected.",
+    title: "Private to you",
+    description: "Your chats, journal entries and mood history are tied to your account. Nobody else can see them.",
   },
   {
     icon: Zap,
-    title: "Instant Support",
+    title: "Help when it's serious",
     description:
-      "Crisis? Get immediate coping strategies and helpline connections.",
+      "If you mention suicide or self-harm in a chat, Solace shows crisis helplines straight away: 988 in the US and befrienders.org everywhere else.",
   },
   {
     icon: Globe,
-    title: "Global Community",
+    title: "Use it anywhere",
     description:
-      "Connect anonymously with others who understand what you're going through.",
+      "Solace runs in your browser on your phone or laptop. There's nothing to install.",
   },
 ]
 
@@ -66,11 +66,11 @@ export function Features() {
             Features
           </span>
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            Everything you need to heal
+            What you can do in Solace
           </h2>
           <p className="mt-4 text-base leading-relaxed text-white/60">
-            One calm, private place for your mind — powered by AI that meets you
-            where you are.
+            Chat, journal, log your mood or take a few slow breaths. It&apos;s all
+            in one place.
           </p>
         </motion.div>
 
